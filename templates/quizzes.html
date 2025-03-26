@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzes & AI Assistance - SEREN AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Space Grotesk', sans-serif;
+}
+body {
+    background: linear-gradient(135deg, #0A192F, #112D4E);
+    color: #F9F7F7;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Navigation Bar */
+nav {
+    background: rgba(17, 45, 78, 0.8);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+}
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+}
+.logo i {
+    margin-right: 10px;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+.nav-links li {
+    display: inline;
+}
+.nav-links a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: #F9F7F7;
+    transition: 0.3s;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+.nav-links a i {
+    margin-right: 8px;
+}
+.nav-links a:hover {
+    background: #3F72AF;
+    color: #FFD700;
+}
+
+/* Main Content */
+.main-content {
+    margin-top: 100px;
+    padding: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+h1 {
+    font-size: 2.5rem;
+    color: #FFD700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.subtitle {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+/* Quiz Generator Section */
+.quiz-generator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+@media (max-width: 900px) {
+    .quiz-generator {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Source Selection */
+.source-selection {
+    background: rgba(17, 45, 78, 0.6);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+.source-selection h2 {
+    color: #FFD700;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+.source-selection h2 i {
+    margin-right: 10px;
+}
+.source-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.tab-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    color: #F9F7F7;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+}
+.tab-btn.active {
+    color: #FFD700;
+}
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #FFD700;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+.file-upload {
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.file-upload:hover {
+    border-color: #3F72AF;
+}
+.file-upload i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #FFD700;
+}
+.file-upload input {
+    display: none;
+}
+.video-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(219, 226, 239, 0.9);
+    color: #112D4E;
+    border: none;
+    margin-bottom: 15px;
+}
+.generate-btn {
+    width: 100%;
+    background: #3F72AF;
+    color: #F9F7F7;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.generate-btn i {
+    margin-right: 8px;
+}
+.generate-btn:hover {
+    background: #1E4D8C;
+    transform: translateY(-2px);
+}
+
+/* Quiz Display */
+.quiz-display {
+    background: rgba(17, 45, 78, 0.6);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    min-height: 300px;
+}
+.quiz-display h2 {
+    color: #FFD700;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+.quiz-display h2 i {
+    margin-right: 10px;
+}
+.question-container {
+    margin-bottom: 30px;
+}
+.question {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+.options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+.option {
+    background: rgba(63, 114, 175, 0.5);
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.option:hover {
+    background: rgba(63, 114, 175, 0.8);
+}
+.option.selected {
+    background: #FFD700;
+    color: #112D4E;
+    font-weight: 500;
+}
+.option.correct {
+    background: #28a745;
+    color: white;
+}
+.option.incorrect {
+    background: #dc3545;
+    color: white;
+}
+.quiz-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.quiz-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.next-btn {
+    background: #3F72AF;
+    color: #F9F7F7;
+}
+.next-btn:hover {
+    background: #1E4D8C;
+}
+.submit-btn {
+    background: #FFD700;
+    color: #112D4E;
+}
+.submit-btn:hover {
+    background: #e6c200;
+}
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+}
+.score {
+    font-size: 1.3rem;
+    color: #FFD700;
+    margin-top: 10px;
+}
+
+/* AI Chatbot */
+.ai-chatbot {
+    background: rgba(17, 45, 78, 0.6);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    margin-top: 30px;
+}
+.ai-chatbot h2 {
+    color: #FFD700;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+.ai-chatbot h2 i {
+    margin-right: 10px;
+}
+.chat-container {
+    height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(10, 25, 47, 0.5);
+    border-radius: 8px;
+}
+.message {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    max-width: 80%;
+}
+.user-message {
+    background: #3F72AF;
+    margin-left: auto;
+    text-align: right;
+}
+.ai-message {
+    background: rgba(63, 114, 175, 0.3);
+    margin-right: auto;
+}
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+}
+.chat-input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(219, 226, 239, 0.9);
+    color: #112D4E;
+}
+.send-btn {
+    padding: 12px 20px;
+    background: #FFD700;
+    color: #112D4E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.send-btn:hover {
+    background: #e6c200;
+}
+</style>
+<body>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            SEREN AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="Index_given.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="study_planner.html"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
+            <li><a href="video_reco.html"><i class="fab fa-youtube"></i> Videos</a></li>
+            <li><a href="notes.html"><i class="fas fa-book"></i> Notes</a></li>
+            <li><a href="quizzes.html"><i class="fas fa-question-circle"></i> Quizzes</a></li>
+            <li><a href="user_profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <h1><i class="fas fa-question-circle"></i> AI Quiz Generator</h1>
+        <p class="subtitle">Generate quizzes from your study materials or ask our AI assistant for help</p>
+
+        <div class="quiz-generator">
+            <div class="source-selection">
+                <h2><i class="fas fa-file-upload"></i> Generate Quiz From</h2>
+                
+                <div class="source-tabs">
+                    <button class="tab-btn active" onclick="openTab('file-tab')">Files</button>
+                    <button class="tab-btn" onclick="openTab('video-tab')">Videos</button>
+                </div>
+                
+                <div id="file-tab" class="tab-content active">
+                    <div class="file-upload" onclick="document.getElementById('file-input').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Upload PPT, PPTX, or TXT file</p>
+                        <p class="small">Click to browse or drag and drop</p>
+                        <input type="file" id="file-input" accept=".ppt,.pptx,.txt,.pdf,.doc,.docx" onchange="handleFileUpload()">
+                    </div>
+                    <div id="file-info" style="display: none; margin-bottom: 15px;">
+                        <p><i class="fas fa-file"></i> <span id="file-name"></span></p>
+                    </div>
+                    <button class="generate-btn" onclick="generateQuizFromFile()">
+                        <i class="fas fa-magic"></i> Generate Quiz
+                    </button>
+                </div>
+                
+                <div id="video-tab" class="tab-content">
+                    <select class="video-select" id="video-select">
+                        <option value="">Select a video from your playlist</option>
+                        <option value="video1">Introduction to Machine Learning</option>
+                        <option value="video2">Neural Networks Explained</option>
+                        <option value="video3">Python for Data Science</option>
+                        <option value="video4">Statistics Fundamentals</option>
+                        <option value="video5">Deep Learning Basics</option>
+                    </select>
+                    <button class="generate-btn" onclick="generateQuizFromVideo()">
+                        <i class="fas fa-magic"></i> Generate Quiz
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-display">
+                <h2><i class="fas fa-question"></i> Quiz Questions</h2>
+                <div id="quiz-container">
+                    <p id="quiz-placeholder">Your generated questions will appear here...</p>
+                    <div id="question-container" style="display: none;">
+                        <div class="question" id="question-text"></div>
+                        <div class="options" id="options-container"></div>
+                        <div class="quiz-controls">
+                            <button class="quiz-btn submit-btn" onclick="submitAnswer()">Submit</button>
+                            <button class="quiz-btn next-btn" onclick="nextQuestion()" style="display: none;">Next</button>
+                        </div>
+                        <div id="result" class="result" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-chatbot">
+            <h2><i class="fas fa-robot"></i> AI Study Assistant</h2>
+            <div class="chat-container" id="chat-container">
+                <div class="message ai-message">
+                    <p>Hello! I'm your AI study assistant. How can I help you with your studies today?</p>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="user-input" placeholder="Ask me anything about your studies..." onkeypress="handleChatInput(event)">
+                <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock quiz data
+        const mockQuizzes = {
+            file: [
+                {
+                    question: "What is the primary purpose of a constructor in object-oriented programming?",
+                    options: [
+                        "To initialize objects",
+                        "To perform mathematical calculations",
+                        "To display output to the console",
+                        "To handle user input"
+                    ],
+                    answer: 0
+                },
+                {
+                    question: "Which data structure uses LIFO (Last In First Out) principle?",
+                    options: [
+                        "Queue",
+                        "Stack",
+                        "Linked List",
+                        "Tree"
+                    ],
+                    answer: 1
+                },
+                {
+                    question: "What does the 'DOM' stand for in web development?",
+                    options: [
+                        "Document Object Model",
+                        "Data Object Management",
+                        "Digital Output Mechanism",
+                        "Display Order Method"
+                    ],
+                    answer: 0
+                },
+                {
+                    question: "Which of the following is NOT a JavaScript data type?",
+                    options: [
+                        "Boolean",
+                        "Number",
+                        "Character",
+                        "Undefined"
+                    ],
+                    answer: 2
+                },
+                {
+                    question: "What is the time complexity of a binary search algorithm?",
+                    options: [
+                        "O(1)",
+                        "O(n)",
+                        "O(log n)",
+                        "O(n²)"
+                    ],
+                    answer: 2
+                }
+            ],
+            video: [
+                {
+                    question: "What is the main advantage of using machine learning over traditional programming?",
+                    options: [
+                        "Machine learning can adapt to new data without explicit programming",
+                        "Machine learning is always faster than traditional programming",
+                        "Machine learning doesn't require any data",
+                        "Machine learning is easier to debug"
+                    ],
+                    answer: 0
+                },
+                {
+                    question: "Which type of neural network is commonly used for image recognition?",
+                    options: [
+                        "Recurrent Neural Network (RNN)",
+                        "Convolutional Neural Network (CNN)",
+                        "Multilayer Perceptron (MLP)",
+                        "Radial Basis Function Network (RBFN)"
+                    ],
+                    answer: 1
+                },
+                {
+                    question: "What does the term 'overfitting' refer to in machine learning?",
+                    options: [
+                        "When a model performs well on training data but poorly on unseen data",
+                        "When a model is too simple to capture patterns in the data",
+                        "When a model takes too long to train",
+                        "When a model has too few parameters"
+                    ],
+                    answer: 0
+                },
+                {
+                    question: "Which Python library is most commonly used for numerical computations in data science?",
+                    options: [
+                        "Pandas",
+                        "Matplotlib",
+                        "NumPy",
+                        "Scikit-learn"
+                    ],
+                    answer: 2
+                },
+                {
+                    question: "What is the purpose of the activation function in a neural network?",
+                    options: [
+                        "To introduce non-linearity into the network",
+                        "To speed up the training process",
+                        "To reduce the number of parameters",
+                        "To visualize the network architecture"
+                    ],
+                    answer: 0
+                }
+            ]
+        };
+
+        // Current quiz state
+        let currentQuiz = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+        let answerSubmitted = false;
+
+        // Tab functionality
+        function openTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show the selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update active tab button
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // File upload handling
+        function handleFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+                fileInfo.style.display = 'block';
+            } else {
+                fileInfo.style.display = 'none';
+            }
+        }
+
+        // Generate quiz from file
+        function generateQuizFromFile() {
+            const fileInput = document.getElementById('file-input');
+            
+            if (fileInput.files.length === 0) {
+                alert('Please upload a file first!');
+                return;
+            }
+            
+            // In a real app, this would call an API to generate quiz from the file
+            // For demo, we'll use mock data
+            currentQuiz = [...mockQuizzes.file];
+            startQuiz();
+        }
+
+        // Generate quiz from video
+        function generateQuizFromVideo() {
+            const videoSelect = document.getElementById('video-select');
+            
+            if (videoSelect.value === "") {
+                alert('Please select a video first!');
+                return;
+            }
+            
+            // In a real app, this would call an API to generate quiz from the video
+            // For demo, we'll use mock data
+            currentQuiz = [...mockQuizzes.video];
+            startQuiz();
+        }
+
+        // Start the quiz
+        function startQuiz() {
+            document.getElementById('quiz-placeholder').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+            currentQuestionIndex = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        // Show current question
+        function showQuestion() {
+            if (currentQuestionIndex >= currentQuiz.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = currentQuiz[currentQuestionIndex];
+            document.getElementById('question-text').textContent = `Question ${currentQuestionIndex + 1}: ${question.question}`;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset UI state
+            document.getElementById('result').style.display = 'none';
+            document.querySelector('.submit-btn').style.display = 'block';
+            document.querySelector('.next-btn').style.display = 'none';
+            selectedOption = null;
+            answerSubmitted = false;
+        }
+
+        // Select an option
+        function selectOption(index) {
+            if (answerSubmitted) return;
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            selectedOption = index;
+        }
+
+        // Submit answer
+        function submitAnswer() {
+            if (selectedOption === null) {
+                alert('Please select an answer first!');
+                return;
+            }
+            
+            answerSubmitted = true;
+            const question = currentQuiz[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            // Mark correct and incorrect answers
+            options[question.answer].classList.add('correct');
+            if (selectedOption !== question.answer) {
+                options[selectedOption].classList.add('incorrect');
+            } else {
+                score++;
+            }
+            
+            // Show result
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = selectedOption === question.answer 
+                ? '<p>Correct! 🎉</p>'
+                : `<p>Incorrect. The correct answer is: <strong>${question.options[question.answer]}</strong></p>`;
+            
+            // Update buttons
+            document.querySelector('.submit-btn').style.display = 'none';
+            document.querySelector('.next-btn').style.display = 'block';
+        }
+
+        // Next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        // Show quiz results
+        function showQuizResults() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = `
+                <div class="result">
+                    <h3>Quiz Completed!</h3>
+                    <p>You scored ${score} out of ${currentQuiz.length}</p>
+                    <p class="score">${Math.round((score / currentQuiz.length) * 100)}%</p>
+                    <button class="quiz-btn" onclick="location.reload()" style="margin-top: 20px;">Take Another Quiz</button>
+                </div>
+            `;
+        }
+
+        // AI Chatbot functionality
+        const aiResponses = [
+            "Great question! Machine learning is a subset of AI that allows systems to learn from data without being explicitly programmed.",
+            "The main difference between supervised and unsupervised learning is that supervised learning uses labeled data while unsupervised learning finds patterns in unlabeled data.",
+            "Yes, neural networks can be used for both classification and regression problems, depending on the output layer configuration.",
+            "The best way to prepare for a data science interview is to practice coding problems, understand machine learning concepts, and be ready to explain your past projects.",
+            "Common evaluation metrics for classification models include accuracy, precision, recall, F1 score, and AUC-ROC curve.",
+            "Feature engineering is important because it can significantly improve model performance by creating more meaningful input features from raw data.",
+            "Regularization techniques like L1 and L2 help prevent overfitting by adding penalty terms to the loss function.",
+            "The bias-variance tradeoff refers to the balance between a model's ability to fit the training data well (low bias) and generalize to new data (low variance).",
+            "Deep learning models typically require large amounts of data to perform well because they have many parameters that need to be trained.",
+            "Transfer learning is useful when you have limited data for your specific task but can leverage knowledge from a model trained on a similar, larger dataset."
+        ];
+
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
+            
+            if (message === '') return;
+            
+            // Add user message to chat
+            addMessage(message, 'user-message');
+            userInput.value = '';
+            
+            // Simulate AI thinking
+            setTimeout(() => {
+                // Generate random AI response
+                const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+                addMessage(randomResponse, 'ai-message');
+            }, 1000);
+        }
+
+        function addMessage(text, className) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${className}`;
+            messageDiv.innerHTML = `<p>${text}</p>`;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Initialize video select options (mock data)
+        document.addEventListener('DOMContentLoaded', function() {
+            // This is already populated in the HTML, but in a real app you might fetch this
+        });
+    </script>
+</body>
+</html>

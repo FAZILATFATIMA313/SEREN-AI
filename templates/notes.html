@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes & Summarization - SEREN AI</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+   
+    <!-- Include pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" integrity="sha512-ml/QKfG3+Yes6TwOzQb7aCNtJF4PUyha6R3w8pSTo/VJSywl7ZreYvvtUso7fKevpsI+pYVVwnu82YO0q3V6eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        /* Add your CSS styles here */
+           /* General Styles */
+           body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+         
+      
+
+        /* Navigation Bar */
+        nav {
+            background: rgba(17, 45, 78, 0.8);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+        .nav-links li {
+            display: inline;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #F9F7F7;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background: #3F72AF;
+            color: #FFD700;
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(17, 45, 78, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 0px auto;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Heading Animation */
+        h1 {
+            font-size: 2.2rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* File Upload Section */
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #3F72AF;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        input[type="file"]:hover {
+            background: #1E4D8C;
+        }
+        .btn {
+            background: #FFD700;
+            color: #0A192F;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background: #FFC107;
+            transform: translateY(-2px);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            font-size: 1rem;
+            color: #FFD700;
+            margin-top: 20px;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background: rgba(249, 247, 247, 0.9);
+            color: #0A192F;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            margin-top: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .summary-section h2 {
+            font-size: 1.8rem;
+            color: #112D4E;
+            margin-bottom: 15px;
+        }
+        .summary-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .copy-btn {
+            background: #3F72AF;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .copy-btn:hover {
+            background: #1E4D8C;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            SEREN AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="Index_given.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="study_planner.html"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
+            <li><a href="video_reco.html"><i class="fab fa-youtube"></i> Youtube Videos & Summarization</a></li>
+            <li><a href="notes.html"><i class="fas fa-book"></i> Notes & Summarization</a></li>
+            <li><a href="quizzes.html"><i class="fas fa-question-circle"></i> Quizzes</a></li>
+            <li><a href="user_profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+  
+    <div class="container">
+        <h1>📝 AI Notes & Summarization</h1>
+        <p>Upload your text file (`.txt`, `.pdf`, or `.pptx`) to get AI-generated key points.</p>
+
+        <!-- File Upload Section -->
+        <div class="upload-section">
+            <input type="file" id="fileInput" accept=".txt, .pdf, .pptx">
+            <button class="btn" onclick="summarizeText()">Summarize</button>
+        </div>
+
+        <p class="loading" id="loading">⏳ Processing your file...</p>
+
+        <!-- Summarization Output -->
+        <div class="summary-section" id="summarySection">
+            <h2>📄 Summary</h2>
+            <p class="summary-text" id="summaryText">Processing...</p>
+            <button class="copy-btn" onclick="copySummary()">📋 Copy</button>
+            <button class="btn" onclick="downloadSummary()">⬇ Download</button>
+        </div>
+    </div>
+
+    <script>
+        const GEMINI_API_KEY = ""; // Replace with your Gemini API key
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+
+        async function summarizeText() {
+            const fileInput = document.getElementById("fileInput");
+            const loading = document.getElementById("loading");
+            const summarySection = document.getElementById("summarySection");
+            const summaryText = document.getElementById("summaryText");
+
+            if (!fileInput.files.length) {
+                alert("❌ Please upload a file first.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const fileType = file.name.split('.').pop().toLowerCase();
+
+            if (!["txt", "pdf", "pptx"].includes(fileType)) {
+                alert("❌ Only .txt, .pdf, and .pptx files are supported.");
+                return;
+            }
+
+            loading.style.display = "block";
+            summarySection.style.display = "none";
+
+            try {
+                let text = "";
+
+                if (fileType === "txt") {
+                    text = await readTextFile(file);
+                } else if (fileType === "pdf") {
+                    text = await extractTextFromPDF(file);
+                } else if (fileType === "pptx") {
+                    text = await extractTextFromPPTX(file);
+                }
+
+                const summary = await summarizeTextWithGemini(text);
+                summaryText.innerText = summary;
+                summarySection.style.display = "block";
+            } catch (error) {
+                console.error("Error:", error);
+                alert(`❌ ${error.message}`);
+            } finally {
+                loading.style.display = "none";
+            }
+        }
+
+        async function readTextFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file);
+            });
+        }
+
+        async function extractTextFromPDF(file) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdfData = new Uint8Array(arrayBuffer);
+
+                    // Load the PDF document
+                    const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+                    let text = "";
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join(" ");
+                    }
+
+                    resolve(text);
+                } catch (error) {
+                    console.error("Error extracting text from PDF:", error);
+                    reject("Failed to extract text from PDF.");
+                }
+            });
+        }
+
+        async function extractTextFromPPTX(file) {
+            // Use a library like pptxjs for PPTX extraction
+            return "📊 PPTX extraction is a placeholder. Add PPTX extraction logic here.";
+        }
+
+        async function summarizeTextWithGemini(text) {
+            try {
+                const response = await fetch(GEMINI_API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Summarize this text: ${text}` }] }]
+                    }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${response.status} - ${JSON.stringify(errorData)}`);
+                }
+
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text || "No summary generated.";
+            } catch (error) {
+                console.error("Error summarizing text:", error);
+                throw new Error("Failed to generate summary. Please check the API key and try again.");
+            }
+        }
+
+        function copySummary() {
+            const summaryText = document.getElementById("summaryText").innerText;
+            navigator.clipboard.writeText(summaryText);
+            alert("✅ Summary copied to clipboard!");
+        }
+
+        function downloadSummary() {
+            const summaryText = document.getElementById("summaryText").innerText;
+            const blob = new Blob([summaryText], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "summary.txt";
+            link.click();
+        }
+    </script>
+</body>
+</html>

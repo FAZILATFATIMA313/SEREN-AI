@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEREN AI - Your AI Study Companion</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation Bar */
+        nav {
+            background: rgba(17, 45, 78, 0.8);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        .nav-links li {
+            display: inline;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #F9F7F7;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background: #3F72AF;
+            color: #FFD700;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            margin-left: 20px;
+        }
+        .auth-btn {
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .signin-btn {
+            background: transparent;
+            color: #F9F7F7;
+            border: 1px solid #F9F7F7;
+        }
+        .signin-btn:hover {
+            background: rgba(249, 247, 247, 0.1);
+        }
+        .signup-btn {
+            background: #FFD700;
+            color: #112D4E;
+            border: 1px solid #FFD700;
+        }
+        .signup-btn:hover {
+            background: #e6c200;
+            border-color: #e6c200;
+        }
+        .title {
+            margin-top: 120px;
+            font-size: 3rem;
+            color: #FFD700;
+            animation: fadeIn 1s ease-in-out forwards;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            color: #FFD700;
+        }
+        .hero p {
+            font-size: 1.4rem;
+            margin-top: 15px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.8;
+        }
+        .cta-btn {
+            margin-top: 30px;
+            display: inline-block;
+            background: #3F72AF;
+            color: white;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .cta-btn:hover {
+            background: #FFD700;
+            color: #112D4E;
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 50px;
+            padding: 40px;
+            text-align: center;
+        }
+        .feature-box {
+            background: rgba(17, 45, 78, 0.6);
+            padding: 30px;
+            width: 250px;
+            border-radius: 10px;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .feature-box:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0px 10px 20px rgba(63, 114, 175, 0.5);
+        }
+        .feature-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        .feature-box p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        .feature-box .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .feature-box:hover .icon {
+            transform: rotate(15deg) scale(1.2);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 60px 20px;
+            background: rgba(17, 45, 78, 0.6);
+            backdrop-filter: blur(10px);
+            margin-top: 50px;
+        }
+        .how-it-works h2 {
+            font-size: 2.5rem;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .steps {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .step {
+            background: rgba(17, 45, 78, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 10px 20px rgba(63, 114, 175, 0.5);
+        }
+        .step h3 {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        .step p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(17, 45, 78, 0.8);
+            margin-top: 50px;
+            backdrop-filter: blur(10px);
+        }
+        /* Rest of your existing CSS remains the same */
+        /* ... */
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">SEREN AI</div>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <div class="auth-buttons">
+                    <a href="sign.html" class="auth-btn signin-btn">Sign In</a>
+                    <a href="sign.html" class="auth-btn signup-btn">Sign Up</a>
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <h1 class="title">Welcome to SEREN AI</h1>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <p>Your AI-powered study companion to guide your learning with personalized roadmaps, video recommendations, and smart assistance.</p>
+        <a href="dashboard.html" class="cta-btn">Get Started</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-box">
+            <div class="icon">📅</div>
+            <h3>Study Planner</h3>
+            <p>Create personalized study schedules with AI assistance to stay organized and focused.</p>
+        </div>
+        <div class="feature-box">
+            <div class="icon">🎥</div>
+            <h3>Video Recommendations</h3>
+            <p>Get AI-curated educational videos tailored to your learning needs.</p>
+        </div>
+        <div class="feature-box">
+            <div class="icon">📄</div>
+            <h3>Notes & Summarization</h3>
+            <p>Summarize lengthy PDFs and study materials into concise, easy-to-read notes.</p>
+        </div>
+        <div class="feature-box">
+            <div class="icon">📝</div>
+            <h3>AI Quizzes</h3>
+            <p>Generate quizzes to test your knowledge and track your progress.</p>
+        </div>
+        <div class="feature-box">
+            <div class="icon">🤖</div>
+            <h3>AI Assistance</h3>
+            <p>Ask questions and get instant, AI-powered answers to clear your doubts.</p>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <h3>Step 1: Sign Up</h3>
+                <p>Create your account and set up your profile to get started.</p>
+            </div>
+            <div class="step">
+                <h3>Step 2: Choose Your Plan</h3>
+                <p>Select a study plan or let AI create one based on your goals.</p>
+            </div>
+            <div class="step">
+                <h3>Step 3: Explore Features</h3>
+                <p>Use tools like Study Planner, Video Recommendations, and AI Quizzes.</p>
+            </div>
+            <div class="step">
+                <h3>Step 4: Track Progress</h3>
+                <p>Monitor your learning progress and improve with AI insights.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 SEREN AI | All Rights Reserved</p>
+    </footer>
+    <!-- Rest of your HTML content remains the same -->
+    <!-- ... -->
+
+</body>
+</html>

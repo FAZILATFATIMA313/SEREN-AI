@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up - SEREN AI</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container */
+        .container {
+            background: rgba(17, 45, 78, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Toggle Buttons */
+        .toggle-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .toggle-buttons button {
+            background: none;
+            border: none;
+            color: #F9F7F7;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+        .toggle-buttons button.active {
+            background: #3F72AF;
+            color: #FFD700;
+        }
+        .toggle-buttons button:hover {
+            background: rgba(63, 114, 175, 0.3);
+        }
+
+        /* Form Styles */
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-container input {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #F9F7F7;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .form-container input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .form-container input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #3F72AF;
+        }
+        .form-container button {
+            background: #3F72AF;
+            color: #F9F7F7;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .form-container button:hover {
+            background: #FFD700;
+            color: #112D4E;
+            transform: translateY(-2px);
+        }
+
+        /* Form Toggle Animation */
+        .form {
+            display: none;
+        }
+        .form.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer Text */
+        .footer-text {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .footer-text a {
+            color: #FFD700;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .footer-text a:hover {
+            color: #3F72AF;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Toggle Buttons -->
+        <div class="toggle-buttons">
+            <button id="signInBtn" class="active">Sign In</button>
+            <button id="signUpBtn">Sign Up</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="signInForm" class="form active">
+            <div class="form-container">
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+            </div>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signUpForm" class="form">
+            <div class="form-container">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </div>
+        </form>
+
+        <!-- Footer Text -->
+        <p class="footer-text">
+            By signing up, you agree to our <a href="#">Terms & Conditions</a>.
+        </p>
+    </div>
+
+    <script>
+        // Toggle between Sign In and Sign Up forms
+        const signInBtn = document.getElementById("signInBtn");
+        const signUpBtn = document.getElementById("signUpBtn");
+        const signInForm = document.getElementById("signInForm");
+        const signUpForm = document.getElementById("signUpForm");
+
+        signInBtn.addEventListener("click", () => {
+            signInBtn.classList.add("active");
+            signUpBtn.classList.remove("active");
+            signInForm.classList.add("active");
+            signUpForm.classList.remove("active");
+        });
+
+        signUpBtn.addEventListener("click", () => {
+            signUpBtn.classList.add("active");
+            signInBtn.classList.remove("active");
+            signUpForm.classList.add("active");
+            signInForm.classList.remove("active");
+        });
+
+        // Handle Sign In Form Submission
+        const signInFormElement = document.getElementById("signInForm");
+        signInFormElement.addEventListener("submit", (event) => {
+            event.preventDefault(); // Prevent the form from submitting traditionally
+
+            // Simulate a successful sign-in
+            alert("Sign In Successful! Redirecting to Dashboard...");
+
+            // Redirect to the dashboard page
+            window.location.href = "dashboard.html";
+        });
+
+        // Handle Sign Up Form Submission
+        const signUpFormElement = document.getElementById("signUpForm");
+        signUpFormElement.addEventListener("submit", (event) => {
+            event.preventDefault(); // Prevent the form from submitting traditionally
+
+            // Simulate a successful sign-up
+            alert("Sign Up Successful! Redirecting to Dashboard...");
+
+            // Redirect to the dashboard page
+            window.location.href = "dashboard.html";
+        });
+    </script>
+
+</body>
+</html>
