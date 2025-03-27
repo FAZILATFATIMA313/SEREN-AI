@@ -370,19 +370,20 @@ h1 {
 </style>
 <body>
     <nav>
-        <div class="logo">
-            <i class="fas fa-brain"></i>
-            SEREN AI
-        </div>
-        <ul class="nav-links">
-            <li><a href="Index_given.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="study_planner.html"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
-            <li><a href="video_reco.html"><i class="fab fa-youtube"></i> Videos</a></li>
-            <li><a href="notes.html"><i class="fas fa-book"></i> Notes</a></li>
-            <li><a href="quizzes.html"><i class="fas fa-question-circle"></i> Quizzes</a></li>
-            <li><a href="user_profile.html"><i class="fas fa-user"></i> Profile</a></li>
-        </ul>
-    </nav>
+    <div class="logo">
+        <i class="fas fa-brain"></i>
+        SEREN AI
+    </div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="{{ url_for('study_planner') }}"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
+        <li><a href="{{ url_for('video_reco') }}"><i class="fab fa-youtube"></i> Youtube Videos & Summarization</a></li>
+        <li><a href="{{ url_for('notes') }}"><i class="fas fa-book"></i> Notes & Summarization</a></li>
+        <li><a href="{{ url_for('quizzes') }}"><i class="fas fa-question-circle"></i> Quizzes</a></li>
+        <li><a href="{{ url_for('user_profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+    </ul>
+</nav>
+   
 
     <div class="main-content">
         <h1><i class="fas fa-question-circle"></i> AI Quiz Generator</h1>
