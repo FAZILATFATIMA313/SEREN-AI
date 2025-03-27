@@ -26,10 +26,6 @@
             box-sizing: border-box;
             font-family: 'Space Grotesk', sans-serif;
         }
-         
-      
-
-        /* Navigation Bar */
         nav {
             background: rgba(17, 45, 78, 0.8);
             padding: 15px 40px;
@@ -214,7 +210,7 @@
     </div>
 
     <script>
-        const GEMINI_API_KEY = ""; // Replace with your Gemini API key
+        const GEMINI_API_KEY = "{{ api_key }}";  // Pass this from Flask 
         const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
 
         async function summarizeText() {
