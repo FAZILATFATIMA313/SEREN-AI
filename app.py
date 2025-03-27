@@ -11,7 +11,7 @@ import docx
 
 
 
-app = Flask(__name__, template_folder='templates')  # or 'SEREN AI/templates' if in a subfolder
+app = Flask(__name__, template_folder='SEREN AI/templates')  # or 'SEREN AI/templates' if in a subfolder
 CORS(app)  # Enable CORS for all routes
 
 # Configure API keys and secret key
