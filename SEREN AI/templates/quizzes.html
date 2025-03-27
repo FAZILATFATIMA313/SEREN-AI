@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <style>
-    * {
+    /* [Previous CSS styles remain exactly the same] */
+    /* ... */
+      /* ... */
+      * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -367,9 +370,22 @@ h1 {
 .send-btn:hover {
     background: #e6c200;
 }
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #FFD700;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 10px;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
 </style>
 <body>
-    <nav>
+  <nav>
     <div class="logo">
         <i class="fas fa-brain"></i>
         SEREN AI
@@ -377,17 +393,16 @@ h1 {
     <ul class="nav-links">
         <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a></li>
         <li><a href="{{ url_for('study_planner') }}"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
-        <li><a href="{{ url_for('video_reco') }}"><i class="fab fa-youtube"></i> Youtube Videos & Summarization</a></li>
-        <li><a href="{{ url_for('notes') }}"><i class="fas fa-book"></i> Notes & Summarization</a></li>
+        <li><a href="{{ url_for('video_reco') }}"><i class="fab fa-youtube"></i> Videos</a></li>
+        <li><a href="{{ url_for('notes') }}"><i class="fas fa-book"></i> Notes</a></li>
         <li><a href="{{ url_for('quizzes') }}"><i class="fas fa-question-circle"></i> Quizzes</a></li>
         <li><a href="{{ url_for('user_profile') }}"><i class="fas fa-user"></i> Profile</a></li>
     </ul>
 </nav>
-   
 
     <div class="main-content">
         <h1><i class="fas fa-question-circle"></i> AI Quiz Generator</h1>
-        <p class="subtitle">Generate quizzes from your study materials or ask our AI assistant for help</p>
+        <p class="subtitle">Generate quizzes from your study materials</p>
 
         <div class="quiz-generator">
             <div class="source-selection">
@@ -401,33 +416,18 @@ h1 {
                 <div id="file-tab" class="tab-content active">
                     <div class="file-upload" onclick="document.getElementById('file-input').click()">
                         <i class="fas fa-cloud-upload-alt"></i>
-                        <p>Upload PPT, PPTX, or TXT file</p>
+                        <p>Upload PPT, PDF, or TXT file</p>
                         <p class="small">Click to browse or drag and drop</p>
                         <input type="file" id="file-input" accept=".ppt,.pptx,.txt,.pdf,.doc,.docx" onchange="handleFileUpload()">
                     </div>
                     <div id="file-info" style="display: none; margin-bottom: 15px;">
                         <p><i class="fas fa-file"></i> <span id="file-name"></span></p>
                     </div>
-                    <button class="generate-btn" onclick="generateQuizFromFile()">
+                    <button class="generate-btn" onclick="generateQuizFromFile()" id="generate-file-btn">
                         <i class="fas fa-magic"></i> Generate Quiz
                     </button>
                 </div>
-                
-                <div id="video-tab" class="tab-content">
-                    <select class="video-select" id="video-select">
-                        <option value="">Select a video from your playlist</option>
-                        <option value="video1">Introduction to Machine Learning</option>
-                        <option value="video2">Neural Networks Explained</option>
-                        <option value="video3">Python for Data Science</option>
-                        <option value="video4">Statistics Fundamentals</option>
-                        <option value="video5">Deep Learning Basics</option>
-                    </select>
-                    <button class="generate-btn" onclick="generateQuizFromVideo()">
-                        <i class="fas fa-magic"></i> Generate Quiz
-                    </button>
-                </div>
-            </div>
-
+              
             <div class="quiz-display">
                 <h2><i class="fas fa-question"></i> Quiz Questions</h2>
                 <div id="quiz-container">
@@ -460,335 +460,295 @@ h1 {
     </div>
 
     <script>
-        // Mock quiz data
-        const mockQuizzes = {
-            file: [
-                {
-                    question: "What is the primary purpose of a constructor in object-oriented programming?",
-                    options: [
-                        "To initialize objects",
-                        "To perform mathematical calculations",
-                        "To display output to the console",
-                        "To handle user input"
-                    ],
-                    answer: 0
-                },
-                {
-                    question: "Which data structure uses LIFO (Last In First Out) principle?",
-                    options: [
-                        "Queue",
-                        "Stack",
-                        "Linked List",
-                        "Tree"
-                    ],
-                    answer: 1
-                },
-                {
-                    question: "What does the 'DOM' stand for in web development?",
-                    options: [
-                        "Document Object Model",
-                        "Data Object Management",
-                        "Digital Output Mechanism",
-                        "Display Order Method"
-                    ],
-                    answer: 0
-                },
-                {
-                    question: "Which of the following is NOT a JavaScript data type?",
-                    options: [
-                        "Boolean",
-                        "Number",
-                        "Character",
-                        "Undefined"
-                    ],
-                    answer: 2
-                },
-                {
-                    question: "What is the time complexity of a binary search algorithm?",
-                    options: [
-                        "O(1)",
-                        "O(n)",
-                        "O(log n)",
-                        "O(n²)"
-                    ],
-                    answer: 2
-                }
-            ],
-            video: [
-                {
-                    question: "What is the main advantage of using machine learning over traditional programming?",
-                    options: [
-                        "Machine learning can adapt to new data without explicit programming",
-                        "Machine learning is always faster than traditional programming",
-                        "Machine learning doesn't require any data",
-                        "Machine learning is easier to debug"
-                    ],
-                    answer: 0
-                },
-                {
-                    question: "Which type of neural network is commonly used for image recognition?",
-                    options: [
-                        "Recurrent Neural Network (RNN)",
-                        "Convolutional Neural Network (CNN)",
-                        "Multilayer Perceptron (MLP)",
-                        "Radial Basis Function Network (RBFN)"
-                    ],
-                    answer: 1
-                },
-                {
-                    question: "What does the term 'overfitting' refer to in machine learning?",
-                    options: [
-                        "When a model performs well on training data but poorly on unseen data",
-                        "When a model is too simple to capture patterns in the data",
-                        "When a model takes too long to train",
-                        "When a model has too few parameters"
-                    ],
-                    answer: 0
-                },
-                {
-                    question: "Which Python library is most commonly used for numerical computations in data science?",
-                    options: [
-                        "Pandas",
-                        "Matplotlib",
-                        "NumPy",
-                        "Scikit-learn"
-                    ],
-                    answer: 2
-                },
-                {
-                    question: "What is the purpose of the activation function in a neural network?",
-                    options: [
-                        "To introduce non-linearity into the network",
-                        "To speed up the training process",
-                        "To reduce the number of parameters",
-                        "To visualize the network architecture"
-                    ],
-                    answer: 0
-                }
-            ]
-        };
-
         // Current quiz state
-        let currentQuiz = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let selectedOption = null;
-        let answerSubmitted = false;
+let currentQuiz = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let selectedOption = null;
+let answerSubmitted = false;
 
-        // Tab functionality
-        function openTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show the selected tab content
-            document.getElementById(tabId).classList.add('active');
-            
-            // Update active tab button
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-        }
+// At the top of your script
+const API_BASE_URL = window.location.origin; // Automatically uses current domain
 
-        // File upload handling
-        function handleFileUpload() {
-            const fileInput = document.getElementById('file-input');
-            const fileInfo = document.getElementById('file-info');
-            const fileName = document.getElementById('file-name');
-            
-            if (fileInput.files.length > 0) {
-                fileName.textContent = fileInput.files[0].name;
-                fileInfo.style.display = 'block';
-            } else {
-                fileInfo.style.display = 'none';
-            }
-        }
+// Then in generateQuizFromFile()
+const response = await fetch(`${API_BASE_URL}/api/generate-quiz-from-file`, {
+    method: 'POST',
+    body: formData
+});
 
-        // Generate quiz from file
-        function generateQuizFromFile() {
-            const fileInput = document.getElementById('file-input');
-            
-            if (fileInput.files.length === 0) {
-                alert('Please upload a file first!');
-                return;
-            }
-            
-            // In a real app, this would call an API to generate quiz from the file
-            // For demo, we'll use mock data
-            currentQuiz = [...mockQuizzes.file];
-            startQuiz();
-        }
+// Tab functionality
+function openTab(tabId) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Show the selected tab content
+    document.getElementById(tabId).classList.add('active');
+    
+    // Update active tab button
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+}
 
-        // Generate quiz from video
-        function generateQuizFromVideo() {
-            const videoSelect = document.getElementById('video-select');
-            
-            if (videoSelect.value === "") {
-                alert('Please select a video first!');
-                return;
-            }
-            
-            // In a real app, this would call an API to generate quiz from the video
-            // For demo, we'll use mock data
-            currentQuiz = [...mockQuizzes.video];
-            startQuiz();
-        }
+// File upload handling
+function handleFileUpload() {
+    const fileInput = document.getElementById('file-input');
+    const fileInfo = document.getElementById('file-info');
+    const fileName = document.getElementById('file-name');
+    
+    if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+        fileInfo.style.display = 'block';
+    } else {
+        fileInfo.style.display = 'none';
+    }
+}
 
-        // Start the quiz
-        function startQuiz() {
-            document.getElementById('quiz-placeholder').style.display = 'none';
-            document.getElementById('question-container').style.display = 'block';
-            currentQuestionIndex = 0;
-            score = 0;
-            showQuestion();
-        }
+// Generate quiz from file
+async function generateQuizFromFile() {
+    const fileInput = document.getElementById('file-input');
+    const generateBtn = document.getElementById('generate-file-btn');
+    
+    if (fileInput.files.length === 0) {
+        alert('Please upload a file first!');
+        return;
+    }
+    
+    generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    generateBtn.disabled = true;
+    
+    try {
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        
+       // At the top of your script
+        const API_BASE_URL = window.location.origin; // Automatically uses current domain
 
-        // Show current question
-        function showQuestion() {
-            if (currentQuestionIndex >= currentQuiz.length) {
-                showQuizResults();
-                return;
-            }
-            
-            const question = currentQuiz[currentQuestionIndex];
-            document.getElementById('question-text').textContent = `Question ${currentQuestionIndex + 1}: ${question.question}`;
-            
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                optionElement.textContent = option;
-                optionElement.onclick = () => selectOption(index);
-                optionsContainer.appendChild(optionElement);
-            });
-            
-            // Reset UI state
-            document.getElementById('result').style.display = 'none';
-            document.querySelector('.submit-btn').style.display = 'block';
-            document.querySelector('.next-btn').style.display = 'none';
-            selectedOption = null;
-            answerSubmitted = false;
-        }
-
-        // Select an option
-        function selectOption(index) {
-            if (answerSubmitted) return;
-            
-            // Remove selected class from all options
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked option
-            document.querySelectorAll('.option')[index].classList.add('selected');
-            selectedOption = index;
-        }
-
-        // Submit answer
-        function submitAnswer() {
-            if (selectedOption === null) {
-                alert('Please select an answer first!');
-                return;
-            }
-            
-            answerSubmitted = true;
-            const question = currentQuiz[currentQuestionIndex];
-            const options = document.querySelectorAll('.option');
-            
-            // Mark correct and incorrect answers
-            options[question.answer].classList.add('correct');
-            if (selectedOption !== question.answer) {
-                options[selectedOption].classList.add('incorrect');
-            } else {
-                score++;
-            }
-            
-            // Show result
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = selectedOption === question.answer 
-                ? '<p>Correct! 🎉</p>'
-                : `<p>Incorrect. The correct answer is: <strong>${question.options[question.answer]}</strong></p>`;
-            
-            // Update buttons
-            document.querySelector('.submit-btn').style.display = 'none';
-            document.querySelector('.next-btn').style.display = 'block';
-        }
-
-        // Next question
-        function nextQuestion() {
-            currentQuestionIndex++;
-            showQuestion();
-        }
-
-        // Show quiz results
-        function showQuizResults() {
-            const quizContainer = document.getElementById('quiz-container');
-            quizContainer.innerHTML = `
-                <div class="result">
-                    <h3>Quiz Completed!</h3>
-                    <p>You scored ${score} out of ${currentQuiz.length}</p>
-                    <p class="score">${Math.round((score / currentQuiz.length) * 100)}%</p>
-                    <button class="quiz-btn" onclick="location.reload()" style="margin-top: 20px;">Take Another Quiz</button>
-                </div>
-            `;
-        }
-
-        // AI Chatbot functionality
-        const aiResponses = [
-            "Great question! Machine learning is a subset of AI that allows systems to learn from data without being explicitly programmed.",
-            "The main difference between supervised and unsupervised learning is that supervised learning uses labeled data while unsupervised learning finds patterns in unlabeled data.",
-            "Yes, neural networks can be used for both classification and regression problems, depending on the output layer configuration.",
-            "The best way to prepare for a data science interview is to practice coding problems, understand machine learning concepts, and be ready to explain your past projects.",
-            "Common evaluation metrics for classification models include accuracy, precision, recall, F1 score, and AUC-ROC curve.",
-            "Feature engineering is important because it can significantly improve model performance by creating more meaningful input features from raw data.",
-            "Regularization techniques like L1 and L2 help prevent overfitting by adding penalty terms to the loss function.",
-            "The bias-variance tradeoff refers to the balance between a model's ability to fit the training data well (low bias) and generalize to new data (low variance).",
-            "Deep learning models typically require large amounts of data to perform well because they have many parameters that need to be trained.",
-            "Transfer learning is useful when you have limited data for your specific task but can leverage knowledge from a model trained on a similar, larger dataset."
-        ];
-
-        function handleChatInput(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        function sendMessage() {
-            const userInput = document.getElementById('user-input');
-            const message = userInput.value.trim();
-            
-            if (message === '') return;
-            
-            // Add user message to chat
-            addMessage(message, 'user-message');
-            userInput.value = '';
-            
-            // Simulate AI thinking
-            setTimeout(() => {
-                // Generate random AI response
-                const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
-                addMessage(randomResponse, 'ai-message');
-            }, 1000);
-        }
-
-        function addMessage(text, className) {
-            const chatContainer = document.getElementById('chat-container');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${className}`;
-            messageDiv.innerHTML = `<p>${text}</p>`;
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        // Initialize video select options (mock data)
-        document.addEventListener('DOMContentLoaded', function() {
-            // This is already populated in the HTML, but in a real app you might fetch this
+        // Then in generateQuizFromFile()
+        const response = await fetch(`${API_BASE_URL}/api/generate-quiz-from-file`, {
+            method: 'POST',
+            body: formData
         });
+        
+        // First check if the response is OK
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Server error: ${response.status} ${response.statusText}\n${errorText}`);
+        }
+        
+        // Then try to parse as JSON
+        const data = await response.json();
+        
+        if (!data.quiz) {
+            throw new Error('No quiz data returned from server');
+        }
+        
+        currentQuiz = parseQuizText(data.quiz);
+        
+        if (currentQuiz.length === 0) {
+            throw new Error('No questions were generated. Please try with a different file.');
+        }
+        
+        startQuiz();
+    } catch (error) {
+        console.error('Full error generating quiz:', error);
+        alert('Error generating quiz:\n' + error.message);
+    } finally {
+        generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Quiz';
+        generateBtn.disabled = false;
+    }
+}
+// Generate quiz from text (for video transcript or direct text)
+async function generateQuizFromText(text) {
+    const generateBtn = document.getElementById('generate-text-btn');
+    
+    // Show loading state
+    generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    generateBtn.disabled = true;
+    
+    try {
+        // Call your backend endpoint for text processing
+        const response = await fetch('${API_BASE_URL}/api/generate-quiz-from-text', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: text })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to generate quiz');
+        }
+        
+        const data = await response.json();
+        
+        // Parse the quiz text into structured format
+        currentQuiz = parseQuizText(data.quiz);
+        
+        if (currentQuiz.length === 0) {
+            throw new Error('No questions were generated. Please try with different content.');
+        }
+        
+        startQuiz();
+    } catch (error) {
+        console.error('Error generating quiz:', error);
+        alert('Error generating quiz: ' + error.message);
+    } finally {
+        // Reset button state
+        generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Quiz';
+        generateBtn.disabled = false;
+    }
+}
+
+// Parse quiz text into structured format
+function parseQuizText(quizText) {
+    const questions = [];
+    const questionBlocks = quizText.split('\n\n').filter(block => block.trim() !== '');
+    
+    questionBlocks.forEach(block => {
+        const lines = block.split('\n').filter(line => line.trim() !== '');
+        if (lines.length >= 6) {
+            const question = {
+                question: lines[0].replace('Question: ', '').trim(),
+                options: [],
+                answer: null
+            };
+            
+            // Process options
+            for (let i = 1; i <= 4; i++) {
+                const optionText = lines[i].substring(3).trim(); // Remove "A) ", "B) ", etc.
+                question.options.push(optionText);
+            }
+            
+            // Find the correct answer (handles both "Answer: A" and "Answer: [text]" formats)
+            const answerLine = lines[5] || '';
+            if (answerLine.startsWith('Answer:')) {
+                const answerText = answerLine.replace('Answer:', '').trim();
+                if (answerText.length === 1) { // Single letter answer (A, B, C, D)
+                    const answerLetter = answerText.toUpperCase();
+                    question.answer = answerLetter.charCodeAt(0) - 65; // A->0, B->1, etc.
+                } else { // Full text answer
+                    question.answer = question.options.findIndex(opt => 
+                        opt.toLowerCase() === answerText.toLowerCase());
+                }
+            }
+            
+            if (question.answer !== null && question.answer >= 0) {
+                questions.push(question);
+            }
+        }
+    });
+    
+    return questions;
+}
+
+// Start the quiz
+function startQuiz() {
+    document.getElementById('quiz-placeholder').style.display = 'none';
+    document.getElementById('question-container').style.display = 'block';
+    currentQuestionIndex = 0;
+    score = 0;
+    showQuestion();
+}
+
+// Show current question
+function showQuestion() {
+    if (currentQuestionIndex >= currentQuiz.length) {
+        showQuizResults();
+        return;
+    }
+    
+    const question = currentQuiz[currentQuestionIndex];
+    document.getElementById('question-text').textContent = `Question ${currentQuestionIndex + 1}: ${question.question}`;
+    
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        optionElement.textContent = option;
+        optionElement.onclick = () => selectOption(index);
+        optionsContainer.appendChild(optionElement);
+    });
+    
+    // Reset UI state
+    document.getElementById('result').style.display = 'none';
+    document.querySelector('.submit-btn').style.display = 'block';
+    document.querySelector('.next-btn').style.display = 'none';
+    selectedOption = null;
+    answerSubmitted = false;
+}
+
+// Select an option
+function selectOption(index) {
+    if (answerSubmitted) return;
+    
+    // Remove selected class from all options
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked option
+    document.querySelectorAll('.option')[index].classList.add('selected');
+    selectedOption = index;
+}
+
+// Submit answer
+function submitAnswer() {
+    if (selectedOption === null) {
+        alert('Please select an answer first!');
+        return;
+    }
+    
+    answerSubmitted = true;
+    const question = currentQuiz[currentQuestionIndex];
+    const options = document.querySelectorAll('.option');
+    
+    // Mark correct and incorrect answers
+    options[question.answer].classList.add('correct');
+    if (selectedOption !== question.answer) {
+        options[selectedOption].classList.add('incorrect');
+    } else {
+        score++;
+    }
+    
+    // Show result
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = selectedOption === question.answer 
+        ? '<p>Correct! 🎉</p>'
+        : `<p>Incorrect. The correct answer is: <strong>${question.options[question.answer]}</strong></p>`;
+    
+    // Update buttons
+    document.querySelector('.submit-btn').style.display = 'none';
+    document.querySelector('.next-btn').style.display = 'block';
+}
+
+// Next question
+function nextQuestion() {
+    currentQuestionIndex++;
+    showQuestion();
+}
+
+// Show quiz results
+function showQuizResults() {
+    const quizContainer = document.getElementById('quiz-container');
+    quizContainer.innerHTML = `
+        <div class="result">
+            <h3>Quiz Completed!</h3>
+            <p>You scored ${score} out of ${currentQuiz.length}</p>
+            <p class="score">${Math.round((score / currentQuiz.length) * 100)}%</p>
+            <button class="quiz-btn" onclick="location.reload()" style="margin-top: 20px;">Take Another Quiz</button>
+        </div>
+    `;
+}
+     
+  
     </script>
 </body>
 </html>
