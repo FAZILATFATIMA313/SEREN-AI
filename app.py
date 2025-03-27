@@ -29,7 +29,39 @@ ALLOWED_EXTENSIONS = {'pdf', 'ppt', 'pptx', 'txt', 'doc', 'docx'}
 genai.configure(api_key='')
 @app.route('/')
 def home():
+    return render_template('Index.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/notes')
+def notes():
     return render_template('notes.html')
+
+@app.route('/quizzzes')
+def quizzes():
+    return render_template('quizzes.html')
+
+@app.route('/saved_videos')
+def saved_videos():
+    return render_template('saved_videos.html')
+
+@app.route('/sign')
+def sign():
+    return render_template('sign.html')
+
+@app.route('/user_profile')
+def user_profile():
+    return render_template('user_profile.html')
+
+@app.route('/video_reco')
+def video_reco():
+    return render_template('video_reco.html')
+
+@app.route('/study_planner')
+def study_planner():
+    return render_template('study_planner.html')
 
 @app.route('/get_transcript', methods=['GET'])
 def get_transcript():
