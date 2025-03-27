@@ -6,399 +6,411 @@
     <title>Quizzes & AI Assistance - SEREN AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: rgba(17, 45, 78, 0.8);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+        }
+        .logo i {
+            margin-right: 10px;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+        .nav-links li {
+            display: inline;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: #F9F7F7;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a i {
+            margin-right: 8px;
+        }
+        .nav-links a:hover {
+            background: #3F72AF;
+            color: #FFD700;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* Quiz Generator Section */
+        .quiz-generator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 900px) {
+            .quiz-generator {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Source Selection */
+        .source-selection {
+            background: rgba(17, 45, 78, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .source-selection h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .source-selection h2 i {
+            margin-right: 10px;
+        }
+        .source-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            color: #F9F7F7;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+        }
+        .tab-btn.active {
+            color: #FFD700;
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #FFD700;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .file-upload:hover {
+            border-color: #3F72AF;
+        }
+        .file-upload i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        .file-upload input {
+            display: none;
+        }
+        .video-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(219, 226, 239, 0.9);
+            color: #112D4E;
+            border: none;
+            margin-bottom: 15px;
+        }
+        .generate-btn {
+            width: 100%;
+            background: #3F72AF;
+            color: #F9F7F7;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .generate-btn i {
+            margin-right: 8px;
+        }
+        .generate-btn:hover {
+            background: #1E4D8C;
+            transform: translateY(-2px);
+        }
+        .generate-btn:disabled {
+            background: #3F72AF;
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Quiz Display */
+        .quiz-display {
+            background: rgba(17, 45, 78, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            min-height: 300px;
+        }
+        .quiz-display h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .quiz-display h2 i {
+            margin-right: 10px;
+        }
+        .question-container {
+            margin-bottom: 30px;
+        }
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .option {
+            background: rgba(63, 114, 175, 0.5);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .option:hover {
+            background: rgba(63, 114, 175, 0.8);
+        }
+        .option.selected {
+            background: #FFD700;
+            color: #112D4E;
+            font-weight: 500;
+        }
+        .option.correct {
+            background: #28a745;
+            color: white;
+        }
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+        }
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .quiz-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .next-btn {
+            background: #3F72AF;
+            color: #F9F7F7;
+        }
+        .next-btn:hover {
+            background: #1E4D8C;
+        }
+        .submit-btn {
+            background: #FFD700;
+            color: #112D4E;
+        }
+        .submit-btn:hover {
+            background: #e6c200;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .score {
+            font-size: 1.3rem;
+            color: #FFD700;
+            margin-top: 10px;
+        }
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #FFD700;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* AI Chatbot */
+        .ai-chatbot {
+            background: rgba(17, 45, 78, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin-top: 30px;
+        }
+        .ai-chatbot h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .ai-chatbot h2 i {
+            margin-right: 10px;
+        }
+        .chat-container {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(10, 25, 47, 0.5);
+            border-radius: 8px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .user-message {
+            background: #3F72AF;
+            margin-left: auto;
+            text-align: right;
+        }
+        .ai-message {
+            background: rgba(63, 114, 175, 0.3);
+            margin-right: auto;
+        }
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(219, 226, 239, 0.9);
+            color: #112D4E;
+        }
+        .send-btn {
+            padding: 12px 20px;
+            background: #FFD700;
+            color: #112D4E;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .send-btn:hover {
+            background: #e6c200;
+        }
+        .send-btn:disabled {
+            background: #FFD700;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
-<style>
-    /* [Previous CSS styles remain exactly the same] */
-    /* ... */
-      /* ... */
-      * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Space Grotesk', sans-serif;
-}
-body {
-    background: linear-gradient(135deg, #0A192F, #112D4E);
-    color: #F9F7F7;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-/* Navigation Bar */
-nav {
-    background: rgba(17, 45, 78, 0.8);
-    padding: 15px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    backdrop-filter: blur(10px);
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-}
-.logo {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #FFD700;
-    display: flex;
-    align-items: center;
-}
-.logo i {
-    margin-right: 10px;
-}
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-}
-.nav-links li {
-    display: inline;
-}
-.nav-links a {
-    text-decoration: none;
-    font-size: 1.1rem;
-    color: #F9F7F7;
-    transition: 0.3s;
-    padding: 8px 12px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-}
-.nav-links a i {
-    margin-right: 8px;
-}
-.nav-links a:hover {
-    background: #3F72AF;
-    color: #FFD700;
-}
-
-/* Main Content */
-.main-content {
-    margin-top: 100px;
-    padding: 30px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-h1 {
-    font-size: 2.5rem;
-    color: #FFD700;
-    margin-bottom: 20px;
-    text-align: center;
-}
-.subtitle {
-    font-size: 1.2rem;
-    text-align: center;
-    margin-bottom: 40px;
-    opacity: 0.9;
-}
-
-/* Quiz Generator Section */
-.quiz-generator {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-bottom: 40px;
-}
-@media (max-width: 900px) {
-    .quiz-generator {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Source Selection */
-.source-selection {
-    background: rgba(17, 45, 78, 0.6);
-    padding: 25px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-}
-.source-selection h2 {
-    color: #FFD700;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-}
-.source-selection h2 i {
-    margin-right: 10px;
-}
-.source-tabs {
-    display: flex;
-    margin-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-.tab-btn {
-    padding: 10px 20px;
-    background: transparent;
-    border: none;
-    color: #F9F7F7;
-    cursor: pointer;
-    font-size: 1rem;
-    position: relative;
-}
-.tab-btn.active {
-    color: #FFD700;
-}
-.tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: #FFD700;
-}
-.tab-content {
-    display: none;
-}
-.tab-content.active {
-    display: block;
-}
-.file-upload {
-    border: 2px dashed rgba(255, 255, 255, 0.3);
-    padding: 30px;
-    text-align: center;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.file-upload:hover {
-    border-color: #3F72AF;
-}
-.file-upload i {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #FFD700;
-}
-.file-upload input {
-    display: none;
-}
-.video-select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    background: rgba(219, 226, 239, 0.9);
-    color: #112D4E;
-    border: none;
-    margin-bottom: 15px;
-}
-.generate-btn {
-    width: 100%;
-    background: #3F72AF;
-    color: #F9F7F7;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.generate-btn i {
-    margin-right: 8px;
-}
-.generate-btn:hover {
-    background: #1E4D8C;
-    transform: translateY(-2px);
-}
-
-/* Quiz Display */
-.quiz-display {
-    background: rgba(17, 45, 78, 0.6);
-    padding: 25px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    min-height: 300px;
-}
-.quiz-display h2 {
-    color: #FFD700;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-}
-.quiz-display h2 i {
-    margin-right: 10px;
-}
-.question-container {
-    margin-bottom: 30px;
-}
-.question {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-}
-.options {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-}
-.option {
-    background: rgba(63, 114, 175, 0.5);
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.option:hover {
-    background: rgba(63, 114, 175, 0.8);
-}
-.option.selected {
-    background: #FFD700;
-    color: #112D4E;
-    font-weight: 500;
-}
-.option.correct {
-    background: #28a745;
-    color: white;
-}
-.option.incorrect {
-    background: #dc3545;
-    color: white;
-}
-.quiz-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-.quiz-btn {
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.next-btn {
-    background: #3F72AF;
-    color: #F9F7F7;
-}
-.next-btn:hover {
-    background: #1E4D8C;
-}
-.submit-btn {
-    background: #FFD700;
-    color: #112D4E;
-}
-.submit-btn:hover {
-    background: #e6c200;
-}
-.result {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: 500;
-}
-.score {
-    font-size: 1.3rem;
-    color: #FFD700;
-    margin-top: 10px;
-}
-
-/* AI Chatbot */
-.ai-chatbot {
-    background: rgba(17, 45, 78, 0.6);
-    padding: 25px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    margin-top: 30px;
-}
-.ai-chatbot h2 {
-    color: #FFD700;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-}
-.ai-chatbot h2 i {
-    margin-right: 10px;
-}
-.chat-container {
-    height: 300px;
-    overflow-y: auto;
-    margin-bottom: 15px;
-    padding: 15px;
-    background: rgba(10, 25, 47, 0.5);
-    border-radius: 8px;
-}
-.message {
-    margin-bottom: 15px;
-    padding: 10px 15px;
-    border-radius: 8px;
-    max-width: 80%;
-}
-.user-message {
-    background: #3F72AF;
-    margin-left: auto;
-    text-align: right;
-}
-.ai-message {
-    background: rgba(63, 114, 175, 0.3);
-    margin-right: auto;
-}
-.chat-input-container {
-    display: flex;
-    gap: 10px;
-}
-.chat-input {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(219, 226, 239, 0.9);
-    color: #112D4E;
-}
-.send-btn {
-    padding: 12px 20px;
-    background: #FFD700;
-    color: #112D4E;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.send-btn:hover {
-    background: #e6c200;
-}
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255,255,255,.3);
-    border-radius: 50%;
-    border-top-color: #FFD700;
-    animation: spin 1s ease-in-out infinite;
-    margin-left: 10px;
-}
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-</style>
 <body>
-  <nav>
-    <div class="logo">
-        <i class="fas fa-brain"></i>
-        SEREN AI
-    </div>
-    <ul class="nav-links">
-        <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="{{ url_for('study_planner') }}"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
-        <li><a href="{{ url_for('video_reco') }}"><i class="fab fa-youtube"></i> Videos</a></li>
-        <li><a href="{{ url_for('notes') }}"><i class="fas fa-book"></i> Notes</a></li>
-        <li><a href="{{ url_for('quizzes') }}"><i class="fas fa-question-circle"></i> Quizzes</a></li>
-        <li><a href="{{ url_for('user_profile') }}"><i class="fas fa-user"></i> Profile</a></li>
-    </ul>
-</nav>
+    <nav>
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            SEREN AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="Index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="study_planner.html"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
+            <li><a href="video_reco.html"><i class="fab fa-youtube"></i> Videos</a></li>
+            <li><a href="notes.html"><i class="fas fa-book"></i> Notes</a></li>
+            <li><a href="quizzes.html"><i class="fas fa-question-circle"></i> Quizzes</a></li>
+            <li><a href="user_profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
 
     <div class="main-content">
         <h1><i class="fas fa-question-circle"></i> AI Quiz Generator</h1>
@@ -427,11 +439,27 @@ h1 {
                         <i class="fas fa-magic"></i> Generate Quiz
                     </button>
                 </div>
-              
+                
+                <div id="video-tab" class="tab-content">
+                    <select class="video-select" id="video-select">
+                        <option value="">Select a video from your playlist</option>
+                        <option value="dQw4w9WgXcQ">Introduction to Machine Learning</option>
+                        <option value="aircAruvnKk">Neural Networks Explained</option>
+                        <option value="LHBE6Q9XlzI">Python for Data Science</option>
+                    </select>
+                    <button class="generate-btn" onclick="generateQuizFromVideo()" id="generate-video-btn">
+                        <i class="fas fa-magic"></i> Generate Quiz
+                    </button>
+                </div>
+            </div>
+
             <div class="quiz-display">
                 <h2><i class="fas fa-question"></i> Quiz Questions</h2>
                 <div id="quiz-container">
                     <p id="quiz-placeholder">Your generated questions will appear here...</p>
+                    <div id="loading-indicator" class="loading-container" style="display: none;">
+                        <div class="loading-spinner"></div>
+                    </div>
                     <div id="question-container" style="display: none;">
                         <div class="question" id="question-text"></div>
                         <div class="options" id="options-container"></div>
@@ -454,301 +482,390 @@ h1 {
             </div>
             <div class="chat-input-container">
                 <input type="text" class="chat-input" id="user-input" placeholder="Ask me anything about your studies..." onkeypress="handleChatInput(event)">
-                <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                <button class="send-btn" onclick="sendMessage()" id="send-btn"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
     <script>
         // Current quiz state
-let currentQuiz = [];
-let currentQuestionIndex = 0;
-let score = 0;
-let selectedOption = null;
-let answerSubmitted = false;
+        let currentQuiz = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+        let answerSubmitted = false;
+        let chatHistory = [
+            { role: "ai", content: "Hello! I'm your AI study assistant. How can I help you with your studies today?" }
+        ];
 
-// At the top of your script
-const API_BASE_URL = window.location.origin; // Automatically uses current domain
-
-// Then in generateQuizFromFile()
-const response = await fetch(`${API_BASE_URL}/api/generate-quiz-from-file`, {
-    method: 'POST',
-    body: formData
-});
-
-// Tab functionality
-function openTab(tabId) {
-    // Hide all tab contents
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    
-    // Show the selected tab content
-    document.getElementById(tabId).classList.add('active');
-    
-    // Update active tab button
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.currentTarget.classList.add('active');
-}
-
-// File upload handling
-function handleFileUpload() {
-    const fileInput = document.getElementById('file-input');
-    const fileInfo = document.getElementById('file-info');
-    const fileName = document.getElementById('file-name');
-    
-    if (fileInput.files.length > 0) {
-        fileName.textContent = fileInput.files[0].name;
-        fileInfo.style.display = 'block';
-    } else {
-        fileInfo.style.display = 'none';
-    }
-}
-
-// Generate quiz from file
-async function generateQuizFromFile() {
-    const fileInput = document.getElementById('file-input');
-    const generateBtn = document.getElementById('generate-file-btn');
-    
-    if (fileInput.files.length === 0) {
-        alert('Please upload a file first!');
-        return;
-    }
-    
-    generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-    generateBtn.disabled = true;
-    
-    try {
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
-        
-       // At the top of your script
-        const API_BASE_URL = window.location.origin; // Automatically uses current domain
-
-        // Then in generateQuizFromFile()
-        const response = await fetch(`${API_BASE_URL}/api/generate-quiz-from-file`, {
-            method: 'POST',
-            body: formData
-        });
-        
-        // First check if the response is OK
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Server error: ${response.status} ${response.statusText}\n${errorText}`);
-        }
-        
-        // Then try to parse as JSON
-        const data = await response.json();
-        
-        if (!data.quiz) {
-            throw new Error('No quiz data returned from server');
-        }
-        
-        currentQuiz = parseQuizText(data.quiz);
-        
-        if (currentQuiz.length === 0) {
-            throw new Error('No questions were generated. Please try with a different file.');
-        }
-        
-        startQuiz();
-    } catch (error) {
-        console.error('Full error generating quiz:', error);
-        alert('Error generating quiz:\n' + error.message);
-    } finally {
-        generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Quiz';
-        generateBtn.disabled = false;
-    }
-}
-// Generate quiz from text (for video transcript or direct text)
-async function generateQuizFromText(text) {
-    const generateBtn = document.getElementById('generate-text-btn');
-    
-    // Show loading state
-    generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-    generateBtn.disabled = true;
-    
-    try {
-        // Call your backend endpoint for text processing
-        const response = await fetch('${API_BASE_URL}/api/generate-quiz-from-text', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: text })
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to generate quiz');
-        }
-        
-        const data = await response.json();
-        
-        // Parse the quiz text into structured format
-        currentQuiz = parseQuizText(data.quiz);
-        
-        if (currentQuiz.length === 0) {
-            throw new Error('No questions were generated. Please try with different content.');
-        }
-        
-        startQuiz();
-    } catch (error) {
-        console.error('Error generating quiz:', error);
-        alert('Error generating quiz: ' + error.message);
-    } finally {
-        // Reset button state
-        generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Quiz';
-        generateBtn.disabled = false;
-    }
-}
-
-// Parse quiz text into structured format
-function parseQuizText(quizText) {
-    const questions = [];
-    const questionBlocks = quizText.split('\n\n').filter(block => block.trim() !== '');
-    
-    questionBlocks.forEach(block => {
-        const lines = block.split('\n').filter(line => line.trim() !== '');
-        if (lines.length >= 6) {
-            const question = {
-                question: lines[0].replace('Question: ', '').trim(),
-                options: [],
-                answer: null
-            };
+        // Tab functionality
+        function openTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-            // Process options
-            for (let i = 1; i <= 4; i++) {
-                const optionText = lines[i].substring(3).trim(); // Remove "A) ", "B) ", etc.
-                question.options.push(optionText);
+            // Show the selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update active tab button
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // File upload handling
+        function handleFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+                fileInfo.style.display = 'block';
+            } else {
+                fileInfo.style.display = 'none';
+            }
+        }
+
+        // Generate quiz from file
+        async function generateQuizFromFile() {
+            const fileInput = document.getElementById('file-input');
+            const generateBtn = document.getElementById('generate-file-btn');
+            
+            if (fileInput.files.length === 0) {
+                alert('Please upload a file first!');
+                return;
             }
             
-            // Find the correct answer (handles both "Answer: A" and "Answer: [text]" formats)
-            const answerLine = lines[5] || '';
-            if (answerLine.startsWith('Answer:')) {
-                const answerText = answerLine.replace('Answer:', '').trim();
-                if (answerText.length === 1) { // Single letter answer (A, B, C, D)
-                    const answerLetter = answerText.toUpperCase();
-                    question.answer = answerLetter.charCodeAt(0) - 65; // A->0, B->1, etc.
-                } else { // Full text answer
-                    question.answer = question.options.findIndex(opt => 
-                        opt.toLowerCase() === answerText.toLowerCase());
+            // Show loading state
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            generateBtn.disabled = true;
+            document.getElementById('quiz-placeholder').style.display = 'none';
+            document.getElementById('loading-indicator').style.display = 'flex';
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                
+                const response = await fetch('/api/generate-quiz-from-file', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                // First check if the response is OK
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server error: ${response.status} ${response.statusText}\n${errorText}`);
                 }
-            }
-            
-            if (question.answer !== null && question.answer >= 0) {
-                questions.push(question);
+                
+                // Then try to parse as JSON
+                const data = await response.json();
+                
+                if (!data.quiz) {
+                    throw new Error('No quiz data returned from server');
+                }
+                
+                currentQuiz = parseQuizText(data.quiz);
+                
+                if (currentQuiz.length === 0) {
+                    throw new Error('No questions were generated. Please try with a different file.');
+                }
+                
+                startQuiz();
+            } catch (error) {
+                console.error('Full error generating quiz:', error);
+                alert('Error generating quiz:\n' + error.message);
+                document.getElementById('quiz-placeholder').style.display = 'block';
+            } finally {
+                generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Quiz';
+                generateBtn.disabled = false;
+                document.getElementById('loading-indicator').style.display = 'none';
             }
         }
-    });
-    
-    return questions;
-}
 
-// Start the quiz
-function startQuiz() {
-    document.getElementById('quiz-placeholder').style.display = 'none';
-    document.getElementById('question-container').style.display = 'block';
-    currentQuestionIndex = 0;
-    score = 0;
-    showQuestion();
-}
+        // Generate quiz from video
+        async function generateQuizFromVideo() {
+            const videoSelect = document.getElementById('video-select');
+            const generateBtn = document.getElementById('generate-video-btn');
+            const videoId = videoSelect.value;
+            
+            if (!videoId) {
+                alert('Please select a video first!');
+                return;
+            }
+            
+            // Show loading state
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            generateBtn.disabled = true;
+            document.getElementById('quiz-placeholder').style.display = 'none';
+            document.getElementById('loading-indicator').style.display = 'flex';
+            
+            try {
+                // First get the transcript
+                const transcriptResponse = await fetch(`/get_transcript?video_id=${videoId}`);
+                if (!transcriptResponse.ok) {
+                    throw new Error('Failed to get video transcript');
+                }
+                const transcriptData = await transcriptResponse.json();
+                
+                if (!transcriptData.transcript) {
+                    throw new Error('No transcript available for this video');
+                }
+                
+                // Then generate quiz from the transcript
+                const quizResponse = await fetch('/api/generate-quiz-from-text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: transcriptData.transcript })
+                });
+                
+                if (!quizResponse.ok) {
+                    throw new Error('Failed to generate quiz from transcript');
+                }
+                
+                const quizData = await quizResponse.json();
+                
+                if (!quizData.quiz) {
+                    throw new Error('No quiz data returned from server');
+                }
+                
+                currentQuiz = parseQuizText(quizData.quiz);
+                
+                if (currentQuiz.length === 0) {
+                    throw new Error('No questions were generated from this video.');
+                }
+                
+                startQuiz();
+            } catch (error) {
+                console.error('Error generating quiz from video:', error);
+                alert('Error generating quiz: ' + error.message);
+                document.getElementById('quiz-placeholder').style.display = 'block';
+            } finally {
+                generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Quiz';
+                generateBtn.disabled = false;
+                document.getElementById('loading-indicator').style.display = 'none';
+            }
+        }
 
-// Show current question
-function showQuestion() {
-    if (currentQuestionIndex >= currentQuiz.length) {
-        showQuizResults();
-        return;
-    }
-    
-    const question = currentQuiz[currentQuestionIndex];
-    document.getElementById('question-text').textContent = `Question ${currentQuestionIndex + 1}: ${question.question}`;
-    
-    const optionsContainer = document.getElementById('options-container');
-    optionsContainer.innerHTML = '';
-    
-    question.options.forEach((option, index) => {
-        const optionElement = document.createElement('div');
-        optionElement.className = 'option';
-        optionElement.textContent = option;
-        optionElement.onclick = () => selectOption(index);
-        optionsContainer.appendChild(optionElement);
-    });
-    
-    // Reset UI state
-    document.getElementById('result').style.display = 'none';
-    document.querySelector('.submit-btn').style.display = 'block';
-    document.querySelector('.next-btn').style.display = 'none';
-    selectedOption = null;
-    answerSubmitted = false;
-}
+        // Parse quiz text into structured format
+        function parseQuizText(quizText) {
+            const questions = [];
+            const questionBlocks = quizText.split('\n\n').filter(block => block.trim() !== '');
+            
+            questionBlocks.forEach(block => {
+                const lines = block.split('\n').filter(line => line.trim() !== '');
+                if (lines.length >= 6) {
+                    const question = {
+                        question: lines[0].replace('Question: ', '').trim(),
+                        options: [],
+                        answer: null
+                    };
+                    
+                    // Process options
+                    for (let i = 1; i <= 4; i++) {
+                        const optionText = lines[i].substring(3).trim(); // Remove "A) ", "B) ", etc.
+                        question.options.push(optionText);
+                    }
+                    
+                    // Find the correct answer (handles both "Answer: A" and "Answer: [text]" formats)
+                    const answerLine = lines[5] || '';
+                    if (answerLine.startsWith('Answer:')) {
+                        const answerText = answerLine.replace('Answer:', '').trim();
+                        if (answerText.length === 1) { // Single letter answer (A, B, C, D)
+                            const answerLetter = answerText.toUpperCase();
+                            question.answer = answerLetter.charCodeAt(0) - 65; // A->0, B->1, etc.
+                        } else { // Full text answer
+                            question.answer = question.options.findIndex(opt => 
+                                opt.toLowerCase() === answerText.toLowerCase());
+                        }
+                    }
+                    
+                    if (question.answer !== null && question.answer >= 0) {
+                        questions.push(question);
+                    }
+                }
+            });
+            
+            return questions;
+        }
 
-// Select an option
-function selectOption(index) {
-    if (answerSubmitted) return;
-    
-    // Remove selected class from all options
-    document.querySelectorAll('.option').forEach(opt => {
-        opt.classList.remove('selected');
-    });
-    
-    // Add selected class to clicked option
-    document.querySelectorAll('.option')[index].classList.add('selected');
-    selectedOption = index;
-}
+        // Start the quiz
+        function startQuiz() {
+            document.getElementById('quiz-placeholder').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+            currentQuestionIndex = 0;
+            score = 0;
+            showQuestion();
+        }
 
-// Submit answer
-function submitAnswer() {
-    if (selectedOption === null) {
-        alert('Please select an answer first!');
-        return;
-    }
-    
-    answerSubmitted = true;
-    const question = currentQuiz[currentQuestionIndex];
-    const options = document.querySelectorAll('.option');
-    
-    // Mark correct and incorrect answers
-    options[question.answer].classList.add('correct');
-    if (selectedOption !== question.answer) {
-        options[selectedOption].classList.add('incorrect');
-    } else {
-        score++;
-    }
-    
-    // Show result
-    const resultDiv = document.getElementById('result');
-    resultDiv.style.display = 'block';
-    resultDiv.innerHTML = selectedOption === question.answer 
-        ? '<p>Correct! 🎉</p>'
-        : `<p>Incorrect. The correct answer is: <strong>${question.options[question.answer]}</strong></p>`;
-    
-    // Update buttons
-    document.querySelector('.submit-btn').style.display = 'none';
-    document.querySelector('.next-btn').style.display = 'block';
-}
+        // Show current question
+        function showQuestion() {
+            if (currentQuestionIndex >= currentQuiz.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = currentQuiz[currentQuestionIndex];
+            document.getElementById('question-text').textContent = `Question ${currentQuestionIndex + 1}: ${question.question}`;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset UI state
+            document.getElementById('result').style.display = 'none';
+            document.querySelector('.submit-btn').style.display = 'block';
+            document.querySelector('.next-btn').style.display = 'none';
+            selectedOption = null;
+            answerSubmitted = false;
+        }
 
-// Next question
-function nextQuestion() {
-    currentQuestionIndex++;
-    showQuestion();
-}
+        // Select an option
+        function selectOption(index) {
+            if (answerSubmitted) return;
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            selectedOption = index;
+        }
 
-// Show quiz results
-function showQuizResults() {
-    const quizContainer = document.getElementById('quiz-container');
-    quizContainer.innerHTML = `
-        <div class="result">
-            <h3>Quiz Completed!</h3>
-            <p>You scored ${score} out of ${currentQuiz.length}</p>
-            <p class="score">${Math.round((score / currentQuiz.length) * 100)}%</p>
-            <button class="quiz-btn" onclick="location.reload()" style="margin-top: 20px;">Take Another Quiz</button>
-        </div>
-    `;
-}
-     
-  
+        // Submit answer
+        function submitAnswer() {
+            if (selectedOption === null) {
+                alert('Please select an answer first!');
+                return;
+            }
+            
+            answerSubmitted = true;
+            const question = currentQuiz[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            // Mark correct and incorrect answers
+            options[question.answer].classList.add('correct');
+            if (selectedOption !== question.answer) {
+                options[selectedOption].classList.add('incorrect');
+            } else {
+                score++;
+            }
+            
+            // Show result
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = selectedOption === question.answer 
+                ? '<p>Correct! 🎉</p>'
+                : `<p>Incorrect. The correct answer is: <strong>${question.options[question.answer]}</strong></p>`;
+            
+            // Update buttons
+            document.querySelector('.submit-btn').style.display = 'none';
+            document.querySelector('.next-btn').style.display = 'block';
+        }
+
+        // Next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        // Show quiz results
+        function showQuizResults() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = `
+                <div class="result">
+                    <h3>Quiz Completed!</h3>
+                    <p>You scored ${score} out of ${currentQuiz.length}</p>
+                    <p class="score">${Math.round((score / currentQuiz.length) * 100)}%</p>
+                    <button class="quiz-btn" onclick="location.reload()" style="margin-top: 20px;">Take Another Quiz</button>
+                </div>
+            `;
+        }
+
+        // Handle chat input
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Send chat message
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
+            const sendBtn = document.getElementById('send-btn');
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessageToChat('user', message);
+            chatHistory.push({ role: "user", content: message });
+            userInput.value = '';
+            sendBtn.disabled = true;
+            
+            try {
+                // Show typing indicator
+                const chatContainer = document.getElementById('chat-container');
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'message ai-message';
+                typingIndicator.innerHTML = '<p><i class="fas fa-ellipsis-h"></i></p>';
+                chatContainer.appendChild(typingIndicator);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                // Call backend for AI response
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        history: chatHistory
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to get AI response');
+                }
+                
+                const data = await response.json();
+                
+                // Remove typing indicator
+                chatContainer.removeChild(typingIndicator);
+                
+                // Add AI response to chat
+                addMessageToChat('ai', data.response);
+                chatHistory.push({ role: "ai", content: data.response });
+            } catch (error) {
+                console.error('Chat error:', error);
+                addMessageToChat('ai', "Sorry, I encountered an error. Please try again later.");
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+
+        // Add message to chat UI
+        function addMessageToChat(sender, message) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
     </script>
 </body>
 </html>
