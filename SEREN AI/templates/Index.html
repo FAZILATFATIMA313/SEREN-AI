@@ -243,10 +243,10 @@
         <div class="logo">SEREN AI</div>
         <div class="nav-container">
             <ul class="nav-links">
-                <li><a href="{{ url_for('dashboard.html') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
                 <div class="auth-buttons">
-                    <a href="{{ url_for('sign.html') }}" class="auth-btn signin-btn">Sign In</a>
-                    <a href="{{ url_for('sign.html') }}" class="auth-btn signup-btn">Sign Up</a>
+                    <a href="{{ url_for('sign') }}" class="auth-btn signin-btn">Sign In</a>
+                    <a href="{{ url_for('sign') }}" class="auth-btn signup-btn">Sign Up</a>
                 </div>
             </ul>
         </div>
@@ -257,7 +257,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <p>Your AI-powered study companion to guide your learning with personalized roadmaps, video recommendations, and smart assistance.</p>
-        <a href="{{ url_for('dashboard.html') }}" class="cta-btn">Get Started</a>
+        <a href="{{ url_for('dashboard') }}" class="cta-btn">Get Started</a>
     </section>
 
     <!-- Features Section -->
