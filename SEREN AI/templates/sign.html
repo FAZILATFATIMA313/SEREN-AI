@@ -171,6 +171,9 @@
     </div>
 
     <script>
+        // Store dashboard URL from Flask template
+        const DASHBOARD_URL = "{{ url_for('dashboard') }}";
+
         // Toggle between Sign In and Sign Up forms
         const signInBtn = document.getElementById("signInBtn");
         const signUpBtn = document.getElementById("signUpBtn");
@@ -200,7 +203,7 @@
             alert("Sign In Successful! Redirecting to Dashboard...");
 
             // Redirect to the dashboard page
-            window.location.href = "dashboard.html";
+            window.location.href = DASHBOARD_URL;
         });
 
         // Handle Sign Up Form Submission
@@ -212,7 +215,7 @@
             alert("Sign Up Successful! Redirecting to Dashboard...");
 
             // Redirect to the dashboard page
-            window.location.href = "dashboard.html";
+            window.location.href = DASHBOARD_URL;
         });
     </script>
 
