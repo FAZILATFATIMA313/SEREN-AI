@@ -7,17 +7,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+          body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Space Grotesk', sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #0A192F, #112D4E);
-            color: #F9F7F7;
-            min-height: 100vh;
-            overflow-x: hidden;
         }
 
         /* Navigation Bar */
@@ -403,12 +405,12 @@
         SEREN AI
     </div>
     <ul class="nav-links">
-        <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="{{ url_for('study_planner') }}"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
-        <li><a href="{{ url_for('video_reco') }}"><i class="fab fa-youtube"></i> Youtube Videos & Summarization</a></li>
-        <li><a href="{{ url_for('notes') }}"><i class="fas fa-book"></i> Notes & Summarization</a></li>
-        <li><a href="{{ url_for('quizzes') }}"><i class="fas fa-question-circle"></i> Quizzes</a></li>
-        <li><a href="{{ url_for('user_profile') }}"><i class="fas fa-user"></i> Profile</a></li>
+        <li><a href="{{ url_for('home') }}"> Home</a></li>
+        <li><a href="{{ url_for('study_planner') }}"> Study Planner</a></li>
+        <li><a href="{{ url_for('video_reco') }}"> Youtube Videos & Summarization</a></li>
+        <li><a href="{{ url_for('notes') }}"> Notes & Summarization</a></li>
+        <li><a href="{{ url_for('quizzes') }}"> Quizzes</a></li>
+        <li><a href="{{ url_for('user_profile') }}"> Profile</a></li>
     </ul>
 </nav>
 
