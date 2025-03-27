@@ -37,7 +37,7 @@ def dashboard():
 
 @app.route('/notes')
 def notes():
-    return render_template('notes.html')
+    return render_template('notes.html', api_key=os.getenv('GEMINI_API_KEY'))
 
 @app.route('/quizzzes')
 def quizzes():
@@ -51,11 +51,11 @@ def saved_videos():
 def sign():
     return render_template('sign.html')
 
-@app.route('/user_profile')
+@app.route('/profile')
 def user_profile():
     return render_template('user_profile.html')
 
-@app.route('/video_reco')
+@app.route('/video-recommendations')
 def video_reco():
     return render_template('video_reco.html')
 
