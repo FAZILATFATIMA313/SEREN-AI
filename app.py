@@ -9,14 +9,15 @@ from PyPDF2 import PdfReader
 from pptx import Presentation
 import docx
 
+
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
+
 # Configure API keys and secret key
 app.config['YOUTUBE_API_KEY'] = os.getenv('YOUTUBE_API_KEY')
 app.config['GEMINI_API_KEY'] = os.getenv('GEMINI_API_KEY')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
 
 # Configuration
 app.config['UPLOAD_FOLDER'] = tempfile.mkdtemp()
