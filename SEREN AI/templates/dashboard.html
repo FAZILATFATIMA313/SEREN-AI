@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SEREN AI</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            text-align: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: rgba(17, 45, 78, 0.8);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+        .nav-links li {
+            display: inline;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #F9F7F7;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background: #3F72AF;
+            color: #FFD700;
+        }
+
+        /* Dashboard Title */
+        .dashboard-title {
+            margin-top: 120px;
+            font-size: 3rem;
+            color: #FFD700;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Grid Layout */
+        .dashboard {
+            font-family: 'Space Grotesk', sans-serif;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 50px auto;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        /* Card Style */
+        .card {
+            background: rgba(17, 45, 78, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0px 10px 20px rgba(63, 114, 175, 0.5);
+        }
+        .card p {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        .card .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .card:hover .icon {
+            transform: rotate(15deg) scale(1.2);
+        }
+
+        /* Button Style */
+        .btn {
+            background: #3F72AF;
+            color: #F9F7F7;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #FFD700;
+            color: #112D4E;
+            transform: translateY(-3px);
+        }
+
+        /* Keyframes */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">SEREN AI</div>
+        <ul class="nav-links">
+            <li><a href="Index_given.html">Home</a></li>
+            <li><a href="study_planner.html">Study Planner</a></li>
+            <li><a href="video_reco.html">Videos</a></li>
+            <li><a href="notes.html">Notes</a></li>
+            <li><a href="quizzes.html">Quizzes</a></li>
+            <li><a href="user_profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Dashboard Heading -->
+    <h1 class="dashboard-title">Welcome to Your AI Dashboard</h1>
+
+    <!-- Dashboard Menu -->
+    <div class="dashboard">
+        <div class="card">
+            <div class="icon">📅</div>
+            <p>Study Planner</p>
+            <a href="study_planner.html" class="btn">Open</a>
+        </div>
+        <div class="card">
+            <div class="icon">🎥</div>
+            <p>Video Recommendations</p>
+            <a href="video_reco.html" class="btn">Open</a>
+        </div>
+        <div class="card">
+            <div class="icon">📄</div>
+            <p>Notes & Summarization</p>
+            <a href="notes_summarization.html" class="btn">Open</a>
+        </div>
+        <div class="card">
+            <div class="icon">📝</div>
+            <p>Quizzes & AI Assistance</p>
+            <a href="quizzes.html" class="btn">Open</a>
+        </div>
+        <div class="card">
+            <div class="icon">👤</div>
+            <p>Profile & Settings</p>
+            <a href="user_profile.html" class="btn">Open</a>
+        </div>
+    </div>
+
+</body>
+</html>

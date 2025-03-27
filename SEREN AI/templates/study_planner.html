@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner - SEREN AI</title>
+    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0A192F, #112D4E);
+            color: #F9F7F7;
+            text-align: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: rgba(17, 45, 78, 0.8);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+        .nav-links li {
+            display: inline;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #F9F7F7;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background: #3F72AF;
+            color: #FFD700;
+        }
+
+        /* Dashboard Title */
+        .dashboard-title {
+            margin-top: 120px;
+            font-size: 3rem;
+            color: #FFD700;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Grid Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 50px auto;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        /* Card Style */
+        .card {
+            background: rgba(17, 45, 78, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0px 10px 20px rgba(63, 114, 175, 0.5);
+        }
+        .card p {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+        .card .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .card:hover .icon {
+            transform: rotate(15deg) scale(1.2);
+        }
+
+        /* Button Style */
+        .btn {
+            background: #3F72AF;
+            color: #F9F7F7;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #FFD700;
+            color: #112D4E;
+            transform: translateY(-3px);
+        }
+
+        /* Keyframes */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-title {
+                font-size: 2.5rem;
+            }
+        }
+  
+        /* Main Container */
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 7rem auto;
+            padding: 0 2rem;
+            gap: 2rem;
+        }
+
+        /* Study Planner Section */
+        .planner-container {
+            flex: 1;
+            background: rgba(17, 45, 78, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(63, 114, 175, 0.5);
+        }
+        .planner-container h1 {
+            font-size: 2.2rem;
+            color: #FFD700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .planner-container h1::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            bottom: -10px;
+            left: 25%;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #F9F7F7;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(219, 226, 239, 0.9);
+            color: #112D4E;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: 2px solid #3F72AF;
+            box-shadow: 0 0 10px rgba(63, 114, 175, 0.5);
+        }
+
+        /* Button Styling */
+        .btn {
+            width: 100%;
+            background: #3F72AF;
+            color: #F9F7F7;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn i {
+            margin-right: 8px;
+        }
+        .btn:hover {
+            background: #1E4D8C;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(63, 114, 175, 0.6);
+        }
+        #resources {
+    background: rgba(219, 226, 239, 0.9);
+    border-radius: 8px;
+    padding: 0.5rem;
+    min-height: 120px;
+}
+
+#resources option {
+    padding: 0.5rem;
+    margin: 2px 0;
+    border-radius: 4px;
+}
+
+#resources option:hover {
+    background: #3F72AF;
+    color: white;
+}
+
+#resources option:checked {
+    background: #112D4E;
+    color: white;
+}
+        /* Resources Sidebar */
+        .resources-sidebar {
+            width: 350px;
+            background: rgba(17, 45, 78, 0.6);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(63, 114, 175, 0.5);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .resources-sidebar h2 {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        .resource-item {
+            background: rgba(10, 25, 47, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 3px solid #3F72AF;
+        }
+        .resource-item:hover {
+            transform: translateX(5px);
+            background: rgba(10, 25, 47, 0.7);
+        }
+        .resource-item h3 {
+            margin: 0 0 0.5rem 0;
+            color: #F9F7F7;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        .resource-item h3 i {
+            margin-right: 8px;
+            color: #FFD700;
+        }
+        .resource-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #DBE2EF;
+        }
+        .resource-item .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #3F72AF;
+        }
+
+        /* Plan Result Section */
+        #planResult {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(10, 25, 47, 0.5);
+            border-radius: 8px;
+            border-left: 4px solid #FFD700;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        #planResult h2 {
+            color: #FFD700;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+        #planResult h2 i {
+            margin-right: 10px;
+        }
+        .plan-day {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+        .plan-day:last-child {
+            border-bottom: none;
+        }
+        .plan-day h3 {
+            color: #3F72AF;
+            margin-bottom: 0.5rem;
+        }
+        .plan-task {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .plan-task i {
+            margin-right: 10px;
+            color: #FFD700;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .resources-sidebar {
+                width: 100%;
+                max-height: 300px;
+            }
+        }
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .nav-links {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+            .nav-links li {
+                margin: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            SEREN AI
+        </div>
+        <ul class="nav-links">
+            <li><a href="Index_given.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="study_planner.html"><i class="fas fa-calendar-alt"></i> Study Planner</a></li>
+            <li><a href="video_reco.html"><i class="fab fa-youtube"></i> Youtube Videos & Summarization</a></li>
+            <li><a href="notes.html"><i class="fas fa-book"></i> Notes & Summarization</a></li>
+            <li><a href="quizzes.html"><i class="fas fa-question-circle"></i> Quizzes</a></li>
+            <li><a href="user_profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Study Planner Section -->
+        <div class="planner-container">
+            <h1>AI Study Planner</h1>
+            
+            <div class="form-group">
+                <label for="subject">Subject/Topic:</label>
+                <input type="text" id="subject" placeholder="E.g., Calculus, Organic Chemistry" required>
+            </div>
+
+            <div class="form-group">
+                <label for="resources">Select Resources (from your saved items):</label>
+                <select id="resources" multiple>
+                    <!-- Will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="studyHours">Available Study Hours Per Day:</label>
+                <select id="studyHours">
+                    <option value="1">1 Hour</option>
+                    <option value="2" selected>2 Hours</option>
+                    <option value="3">3 Hours</option>
+                    <option value="4">4 Hours</option>
+                    <option value="5">5+ Hours</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="targetDate">Target Completion Date:</label>
+                <input type="date" id="targetDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="studyStyle">Preferred Study Style:</label>
+                <select id="studyStyle">
+                    <option value="balanced">Balanced (Mix of videos and notes)</option>
+                    <option value="visual">Visual Learner (More videos)</option>
+                    <option value="reading">Reading Learner (More notes)</option>
+                    <option value="intensive">Intensive (Maximum coverage)</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn" onclick="generatePlan()">
+                <i class="fas fa-magic"></i> Generate Study Plan
+            </button>
+
+            <div id="planResult"></div>
+        </div>
+
+        <!-- Resources Sidebar -->
+        <!-- In your study_planner.html, update the resources sidebar section to match your playlist style -->
+<div class="resources-sidebar">
+    <h2><i class="fas fa-bookmark"></i> Your Learning Resources</h2>
+    
+    <div class="resource-category">
+        <h3><i class="fab fa-youtube"></i> Video Playlist</h3>
+        <div id="playlistResources">
+            <!-- Will be populated from your playlist -->
+        </div>
+    </div>
+    
+    <div class="resource-category">
+        <h3><i class="fas fa-file-alt"></i> Saved Notes</h3>
+        <div id="notesResources">
+            <!-- Will be populated from your notes -->
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+       // Study Planner JavaScript that integrates with your playlist system
+document.addEventListener('DOMContentLoaded', function() {
+    // Load resources from both localStorage (playlist) and any other sources
+    loadResourcesForPlanner();
+    
+    // Set minimum date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('targetDate').min = tomorrow.toISOString().split('T')[0];
+});
+
+// Load resources from localStorage (your playlist system)
+function loadResourcesForPlanner() {
+    const playlistContainer = document.getElementById('playlistResources');
+    const notesContainer = document.getElementById('notesResources');
+    
+    // Clear existing content
+    playlistContainer.innerHTML = '';
+    notesContainer.innerHTML = '';
+    
+    // Load video playlist
+    const playlistItems = JSON.parse(localStorage.getItem('playlist')) || [];
+    if (playlistItems.length === 0) {
+        playlistContainer.innerHTML = '<p class="empty-resource">No videos in your playlist yet</p>';
+    } else {
+        playlistItems.forEach(video => {
+            const videoElement = createResourceElement(video, 'video');
+            playlistContainer.appendChild(videoElement);
+        });
+    }
+    
+    // Load notes (you'll need to implement your notes storage similarly)
+    const savedNotes = JSON.parse(localStorage.getItem('savedNotes')) || [];
+    if (savedNotes.length === 0) {
+        notesContainer.innerHTML = '<p class="empty-resource">No saved notes yet</p>';
+    } else {
+        savedNotes.forEach(note => {
+            const noteElement = createResourceElement(note, 'note');
+            notesContainer.appendChild(noteElement);
+        });
+    }
+    
+    // Populate the resources dropdown in the planner form
+    populateResourceDropdown(playlistItems, savedNotes);
+}
+
+// Create resource element for display in sidebar
+function createResourceElement(resource, type) {
+    const element = document.createElement('div');
+    element.className = 'resource-item';
+    element.dataset.id = resource.id;
+    element.dataset.type = type;
+    
+    if (type === 'video') {
+        element.innerHTML = `
+            <h3><i class="fas fa-play-circle"></i> ${resource.title}</h3>
+            <p>${resource.subject || 'General'} • ${resource.duration || 'N/A'}</p>
+            <div class="resource-meta">
+                <span>Video</span>
+                <span>ID: ${resource.id}</span>
+            </div>
+        `;
+    } else { // note
+        element.innerHTML = `
+            <h3><i class="fas fa-file-alt"></i> ${resource.title}</h3>
+            <p>${resource.subject || 'General'} • ${resource.pages || 'N/A'} pages</p>
+            <div class="resource-meta">
+                <span>Note</span>
+                <span>ID: ${resource.id}</span>
+            </div>
+        `;
+    }
+    
+    return element;
+}
+
+// Populate the resources dropdown in the form
+function populateResourceDropdown(videos, notes) {
+    const dropdown = document.getElementById('resources');
+    dropdown.innerHTML = '';
+    
+    // Add video options
+    videos.forEach(video => {
+        const option = document.createElement('option');
+        option.value = `${video.id}|video`;
+        option.textContent = `[Video] ${video.title}`;
+        dropdown.appendChild(option);
+    });
+    
+    // Add note options
+    notes.forEach(note => {
+        const option = document.createElement('option');
+        option.value = `${note.id}|note`;
+        option.textContent = `[Note] ${note.title}`;
+        dropdown.appendChild(option);
+    });
+    
+    // Enable multiple selection
+    dropdown.multiple = true;
+    dropdown.size = Math.min(10, Math.max(3, videos.length + notes.length));
+}
+// Generate study plan using resources from playlist
+// Updated generatePlan function that respects selected resources
+function generatePlan() {
+    const subject = document.getElementById('subject').value.trim();
+    const studyHours = parseInt(document.getElementById('studyHours').value);
+    const targetDate = new Date(document.getElementById('targetDate').value);
+    const studyStyle = document.getElementById('studyStyle').value;
+    const selectedOptions = Array.from(document.getElementById('resources').selectedOptions);
+    
+    // Basic validation
+    if (!subject) return alert('Please enter a subject/topic');
+    if (!targetDate) return alert('Please select a target completion date');
+    if (selectedOptions.length === 0) return alert('Please select at least one resource');
+    
+    // Calculate days until target date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysDiff = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24));
+    if (daysDiff <= 0) return alert('Target date must be in the future');
+    
+    // Get all resources from storage
+    const allVideos = JSON.parse(localStorage.getItem('playlist')) || [];
+    const allNotes = JSON.parse(localStorage.getItem('savedNotes')) || [];
+    
+    // Process selected resources
+    const selectedResources = selectedOptions.map(option => {
+        const [id, type] = option.value.split('|');
+        return { id, type };
+    });
+    
+    // Filter ONLY the selected resources
+    const selectedVideos = allVideos.filter(video => 
+        selectedResources.some(r => r.type === 'video' && r.id === video.id)
+    );
+    
+    const selectedNotes = allNotes.filter(note => 
+        selectedResources.some(r => r.type === 'note' && r.id === note.id)
+    );
+    
+    // Calculate total study hours available
+    const totalHours = daysDiff * studyHours;
+    
+    // Generate plan using ONLY selected resources
+    const plan = createStudyPlan(selectedVideos, selectedNotes, daysDiff, studyHours, studyStyle, subject);
+    
+    // Display the plan
+    displayPlan(plan, subject, daysDiff, totalHours);
+}
+
+// Updated createStudyPlan function to work with selected resources only
+function createStudyPlan(videos, notes, days, hoursPerDay, style, subject) {
+    let plan = [];
+    
+    // Calculate how many items we can cover per day
+    const totalItems = videos.length + notes.length;
+    const itemsPerDay = Math.max(1, Math.floor(totalItems / days));
+    
+    // Shuffle resources to mix videos and notes
+    const allResources = [
+        ...videos.map(v => ({...v, type: 'video'})),
+        ...notes.map(n => ({...n, type: 'note'}))
+    ];
+    
+    // Distribute resources across days
+    let resourceIndex = 0;
+    for (let day = 1; day <= days; day++) {
+        const dayPlan = {
+            day: day,
+            date: new Date(),
+            tasks: []
+        };
+        
+        dayPlan.date.setDate(dayPlan.date.getDate() + day - 1);
+        
+        // Add items for this day
+        let dayHoursUsed = 0;
+        while (dayHoursUsed < hoursPerDay && resourceIndex < allResources.length) {
+            const resource = allResources[resourceIndex];
+            let duration = '';
+            
+            if (resource.type === 'video') {
+                duration = hoursPerDay >= 2 ? '45-60 min' : '30-45 min';
+                dayPlan.tasks.push({
+                    type: 'video',
+                    title: resource.title,
+                    duration: duration,
+                    resource: resource,
+                    url: resource.url
+                });
+                dayHoursUsed += 0.75; // Count as 45-60 mins
+            } else {
+                duration = hoursPerDay >= 2 ? '60-75 min' : '45-60 min';
+                dayPlan.tasks.push({
+                    type: 'note',
+                    title: resource.title,
+                    duration: duration,
+                    resource: resource,
+                    url: resource.url || '#'
+                });
+                dayHoursUsed += 1; // Count as 60-75 mins
+            }
+            
+            resourceIndex++;
+            
+            // Don't exceed daily hours
+            if (dayHoursUsed >= hoursPerDay) break;
+        }
+        
+        // Add practice/review on every 3rd day if we have time
+        if (day > 1 && day % 3 === 0 && dayHoursUsed < hoursPerDay) {
+            dayPlan.tasks.push({
+                type: 'practice',
+                title: `Review ${subject} concepts`,
+                duration: '30-45 min',
+                resource: null
+            });
+            dayHoursUsed += 0.5;
+        }
+        
+        // Add break on every 5th day
+        if (day % 5 === 0) {
+            dayPlan.tasks = [{
+                type: 'break',
+                title: `Light review or break day`,
+                duration: '30 min max',
+                resource: null
+            }];
+        }
+        
+        plan.push(dayPlan);
+    }
+    
+    return plan;
+}
+    // Display the plan
+
+// Create the study plan structure
+function createStudyPlan(videos, notes, days, hoursPerDay, style, subject) {
+    let plan = [];
+    let videoRatio, noteRatio;
+    
+    // Set ratios based on study style
+    switch(style) {
+        case 'visual': videoRatio = 0.7; noteRatio = 0.3; break;
+        case 'reading': videoRatio = 0.3; noteRatio = 0.7; break;
+        case 'intensive': videoRatio = 0.5; noteRatio = 0.5; break;
+        default: videoRatio = 0.5; noteRatio = 0.5; // balanced
+    }
+    
+    // Distribute resources across days
+    for (let day = 1; day <= days; day++) {
+        const dayPlan = {
+            day: day,
+            date: new Date(),
+            tasks: []
+        };
+        
+        dayPlan.date.setDate(dayPlan.date.getDate() + day - 1);
+        
+        // Add video tasks
+        if (videos.length > 0 && (style === 'visual' || day % 2 !== 0)) {
+            const videoIndex = (day - 1) % videos.length;
+            dayPlan.tasks.push({
+                type: 'video',
+                title: videos[videoIndex].title,
+                duration: hoursPerDay >= 2 ? '45-60 min' : '30-45 min',
+                resource: videos[videoIndex],
+                url: videos[videoIndex].url
+            });
+        }
+        
+        // Add note tasks
+        if (notes.length > 0 && (style === 'reading' || day % 2 === 0)) {
+            const noteIndex = (day - 1) % notes.length;
+            dayPlan.tasks.push({
+                type: 'note',
+                title: notes[noteIndex].title,
+                duration: hoursPerDay >= 2 ? '60-75 min' : '45-60 min',
+                resource: notes[noteIndex],
+                url: notes[noteIndex].url || '#'
+            });
+        }
+        
+        // Add practice/review tasks
+        if (day > 1 && day % 3 === 0) {
+            dayPlan.tasks.push({
+                type: 'practice',
+                title: `Review ${subject} concepts`,
+                duration: '30-45 min',
+                resource: null
+            });
+        }
+        
+        // Add break days
+        if (day % 5 === 0) {
+            dayPlan.tasks = [{
+                type: 'break',
+                title: `Light review or break day`,
+                duration: '30 min max',
+                resource: null
+            }];
+        }
+        
+        plan.push(dayPlan);
+    }
+    
+    return plan;
+}
+
+// Display the generated plan
+function displayPlan(plan, subject, days, totalHours) {
+    const planResult = document.getElementById('planResult');
+    
+    // Calculate stats
+    const videoCount = plan.flatMap(d => d.tasks).filter(t => t.type === 'video').length;
+    const noteCount = plan.flatMap(d => d.tasks).filter(t => t.type === 'note').length;
+    
+    planResult.innerHTML = `
+        <h2><i class="fas fa-calendar-check"></i> Your ${subject} Study Plan</h2>
+        <p>This ${days}-day plan provides ${totalHours} total study hours.</p>
+        <div class="plan-stats">
+            <p><i class="fas fa-video"></i> ${videoCount} video sessions</p>
+            <p><i class="fas fa-book"></i> ${noteCount} note sessions</p>
+        </div>
+    `;
+    
+    plan.forEach(dayPlan => {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'plan-day';
+        
+        const dateStr = dayPlan.date.toLocaleDateString('en-US', { 
+            weekday: 'long', month: 'short', day: 'numeric' 
+        });
+        
+        dayElement.innerHTML = `<h3>Day ${dayPlan.day} - ${dateStr}</h3>`;
+        
+        if (dayPlan.tasks.length === 0) {
+            dayElement.innerHTML += `
+                <div class="plan-task">
+                    <i class="fas fa-coffee"></i>
+                    <span>Rest day - no scheduled tasks</span>
+                </div>
+            `;
+        } else {
+            dayPlan.tasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'plan-task';
+                
+                let icon = 'fas fa-book';
+                if (task.type === 'video') icon = 'fas fa-play-circle';
+                if (task.type === 'practice') icon = 'fas fa-pen-fancy';
+                if (task.type === 'break') icon = 'fas fa-coffee';
+                
+                let resourceLink = '';
+                if (task.url && task.url !== '#') {
+                    resourceLink = `<a href="${task.url}" target="_blank" class="resource-link">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>`;
+                }
+                
+                taskElement.innerHTML = `
+                    <i class="${icon}"></i>
+                    <span><strong>${task.title}</strong> (${task.duration})</span>
+                    ${resourceLink}
+                `;
+                
+                dayElement.appendChild(taskElement);
+            });
+        }
+        
+        planResult.appendChild(dayElement);
+    });
+}
+    </script>
+</body>
+</html>
