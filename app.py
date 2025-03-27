@@ -29,7 +29,7 @@ genai.configure(api_key='')
 app = Flask(__name__, template_folder='templates')  # or 'SEREN AI/templates' if in a subfolder
 @app.route('/')
 def home():
-    return render_template('Index.html')
+    return render_templates('Index.html')
 
 @app.route('/get_transcript', methods=['GET'])
 def get_transcript():
