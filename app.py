@@ -26,7 +26,7 @@ ALLOWED_EXTENSIONS = {'pdf', 'ppt', 'pptx', 'txt', 'doc', 'docx'}
 
 # Initialize Gemini
 genai.configure(api_key='')
-
+app = Flask(__name__, template_folder='templates')  # or 'SEREN AI/templates' if in a subfolder
 @app.route('/')
 def home():
     return render_template('Index.html')
